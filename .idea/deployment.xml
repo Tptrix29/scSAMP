@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="tianpei@100.64.179.5:1004 password" deleteMissingItems="true">
+    <serverData>
+      <paths name="tianpei@100.64.179.5:1004 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/tianpei/workspace-jupyter/tools" local="$PROJECT_DIR$/tools" />
+            <mapping deploy="/home/tianpei/sync-py" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
