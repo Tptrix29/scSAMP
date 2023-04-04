@@ -1,0 +1,28 @@
+:py:mod:`tools`
+===============
+
+.. py:module:: tools
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   evaluation/index.rst
+   processing/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   config/index.rst
+   decorator/index.rst
+   plot/index.rst
+   utils/index.rst
+
+

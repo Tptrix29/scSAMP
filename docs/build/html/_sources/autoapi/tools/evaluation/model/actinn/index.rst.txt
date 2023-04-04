@@ -1,0 +1,96 @@
+:py:mod:`tools.evaluation.model.actinn`
+=======================================
+
+.. py:module:: tools.evaluation.model.actinn
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.model.actinn.ACTINN
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.model.actinn.one_hot_matrix
+   tools.evaluation.model.actinn.type_to_label_dict
+   tools.evaluation.model.actinn.convert_type_to_label
+   tools.evaluation.model.actinn.create_placeholders
+   tools.evaluation.model.actinn.initialize_parameters
+   tools.evaluation.model.actinn.forward_propagation
+   tools.evaluation.model.actinn.compute_cost
+   tools.evaluation.model.actinn.random_mini_batches
+   tools.evaluation.model.actinn.forward_propagation_for_predict
+   tools.evaluation.model.actinn.predict_probability
+   tools.evaluation.model.actinn.model
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.model.actinn.run_time
+
+
+.. py:data:: run_time
+
+   
+
+.. py:function:: one_hot_matrix(labels, C)
+
+
+.. py:function:: type_to_label_dict(types)
+
+
+.. py:function:: convert_type_to_label(types, type_to_label_dict)
+
+
+.. py:function:: create_placeholders(n_x, n_y)
+
+
+.. py:function:: initialize_parameters(nf, ln1, ln2, ln3, nt)
+
+
+.. py:function:: forward_propagation(X, parameters)
+
+
+.. py:function:: compute_cost(Z4, Y, parameters, lambd=0.01)
+
+
+.. py:function:: random_mini_batches(X, Y, mini_batch_size=32, seed=1)
+
+
+.. py:function:: forward_propagation_for_predict(X, parameters)
+
+
+.. py:function:: predict_probability(X, parameters)
+
+
+.. py:function:: model(X_train, Y_train, starting_learning_rate=0.0001, num_epochs=1500, minibatch_size=128, print_cost=True)
+
+
+.. py:class:: ACTINN(lr: float, n_epochs: int, batch_size: int)
+
+   .. py:method:: fit(X: numpy.array, y: numpy.array) -> None
+
+      Train model with Neural Network.
+      :param X: (n_cell, n_gene)
+      :param y: (n_cell, ), str
+      :return: None
+
+
+   .. py:method:: predict(X: numpy.array) -> numpy.array
+
+
+

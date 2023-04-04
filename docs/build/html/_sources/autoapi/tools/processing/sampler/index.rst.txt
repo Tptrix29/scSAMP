@@ -1,0 +1,87 @@
+:py:mod:`tools.processing.sampler`
+==================================
+
+.. py:module:: tools.processing.sampler
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.processing.sampler.SamplingProcessor
+
+
+
+
+.. py:class:: SamplingProcessor(reference: anndata.AnnData, cluster_col: str, ratio: Optional[float], random_state: int = settings.random_state)
+
+   Sampling Processing Class.
+
+
+   .. py:method:: sampling(strategy: str) -> anndata.AnnData
+
+      Sampling function with strategy parameter.
+      :param strategy: sampling strategy
+          Sampling Strategy Option:
+          ``stratify``:
+              Classical stratified sampling
+          ``balance``:
+              Stratified sampling with balanced ratio
+          ``compactness``:
+              Adjusted sampling with intra-cluster compactness factor
+          ``complexity``:
+              Adjusted sampling with inter-cluster complexity factor
+          ``concave``:
+              Adjusted sampling with concave integration of compactness factor and complexity factor
+          ``convex``:
+              Adjusted sampling with convex integration of compactness factor and complexity factor
+          ``entropy``:
+              Adjusted sampling with entropy weight integration of compactness factor and complexity factor
+      :return: sampled dataset as AnnData object
+
+
+   .. py:method:: reset_ratio(ratio: float) -> None
+
+
+   .. py:method:: get_target_dataset(col: Optional[str] = None) -> anndata.AnnData
+
+      Get sampled dataset.
+      :return: sampled dataset as AnnData object
+
+
+   .. py:method:: generate_factors()
+
+
+   .. py:method:: _check_factor(factor_type: str)
+
+      Check the existence of specific factor
+      :param factor_type: factor name
+
+
+   .. py:method:: _generate_oversampling() -> None
+
+      Generate oversampling dataset.
+      SMOTE is the most stable oversampling method (Generate fully-balanced dataset)
+      Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans
+
+
+   .. py:method:: _stratify() -> anndata.AnnData
+
+      Classical stratified sampling method.
+
+
+   .. py:method:: _imbalance_sampling(target_ratio: numpy.array) -> anndata.AnnData
+
+      Imbalanced sampling operation.
+      :param target_ratio: target sampling ratio for each cluster
+      :return: sampled dataset as AnnData object
+
+
+   .. py:method:: to_hdf5(strategy: str, prefix: str)
+
+
+

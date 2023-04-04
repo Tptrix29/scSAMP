@@ -1,0 +1,73 @@
+:py:mod:`tools.evaluation.eval`
+===============================
+
+.. py:module:: tools.evaluation.eval
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.eval.EvaluationProcessor
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.eval.font
+
+
+.. py:data:: font
+
+   
+
+.. py:class:: EvaluationProcessor(ref: anndata.AnnData, query: anndata.AnnData, col: str, up: Optional[float], step: int)
+
+   Evaluation-delivering class.
+
+
+   .. py:method:: eval(classifier: str, **kwargs) -> None
+
+      Evaluation with certain classifier.
+      :param classifier: classification model name
+
+
+   .. py:method:: _svm_train(X1, y1, **kwargs)
+
+
+   .. py:method:: _svm_eval(X, y)
+
+
+   .. py:method:: _actinn_train(X1, y1, **kwargs)
+
+
+   .. py:method:: _actinn_eval(X, y)
+
+
+   .. py:method:: predict(X)
+
+
+   .. py:method:: get_records() -> pandas.DataFrame
+
+
+   .. py:method:: lastest_status() -> Optional[pandas.DataFrame]
+
+
+   .. py:method:: deposit_records(filepath: str) -> None
+
+
+   .. py:method:: fig_panel(model: str, metrics: Union[tuple, list] = ('accuracy', 'precision', 'recall', 'F1', 'kappa'), n_rows: int = 2, width: int = 3, height: int = 3, legend: bool = True, score_lim: bool = True)
+
+
+   .. py:method:: cluster_f1_cols() -> list
+
+
+

@@ -1,0 +1,26 @@
+:py:mod:`tools.plot`
+====================
+
+.. py:module:: tools.plot
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.plot.line_eval
+   tools.plot.kernel_distribution_eval
+
+
+
+.. py:function:: line_eval(x: Union[numpy.array, list], y_array: numpy.array, line_labels: list[str], prob_lim: bool, title: str = None, xlab: str = None, ylab: str = None) -> None
+
+
+.. py:function:: kernel_distribution_eval(X, multi=False)
+
+

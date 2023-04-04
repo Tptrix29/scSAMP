@@ -1,0 +1,67 @@
+:py:mod:`tools.utils`
+=====================
+
+.. py:module:: tools.utils
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.utils.Setting
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.utils.timer
+   tools.utils.to_hdf5
+   tools.utils._check_obs_key
+   tools.utils._check_ratio
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.utils.settings
+
+
+.. py:function:: timer(func)
+
+
+.. py:class:: Setting
+
+   .. py:method:: reset_seed()
+
+
+
+.. py:data:: settings
+
+   
+
+.. py:function:: to_hdf5(source_file: Union[str, list], result_dir: str, type_label: str, source_format: str) -> list
+
+   Convert csv/tab table to h5ad format
+   :param source_file: raw file path
+   :param result_dir: output directory
+   :param type_label: column name
+   :param source_format: raw file type
+   :return: output file location list
+
+
+.. py:function:: _check_obs_key(adata: anndata.AnnData, key: str) -> bool
+
+
+.. py:function:: _check_ratio(ratio: float) -> bool
+
+

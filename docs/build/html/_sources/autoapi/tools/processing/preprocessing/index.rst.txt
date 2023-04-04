@@ -1,0 +1,111 @@
+:py:mod:`tools.processing.preprocessing`
+========================================
+
+.. py:module:: tools.processing.preprocessing
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.processing.preprocessing.BasePreprocessor
+   tools.processing.preprocessing.BasicPreprocessor
+   tools.processing.preprocessing.HVGPreprocessor
+   tools.processing.preprocessing.PCAPreprocessor
+
+
+
+
+.. py:class:: BasePreprocessor
+
+   .. py:method:: reset_params(cells_threshold: int = 3, genes_threshold: int = 200, target_threshold: int = 10000.0, max_threshold: int = 10) -> None
+
+
+   .. py:method:: display_params()
+      :abstractmethod:
+
+
+   .. py:method:: refPreprocessing(ref: anndata.AnnData) -> anndata.AnnData
+      :abstractmethod:
+
+
+   .. py:method:: queryPreprocessor(query: anndata.AnnData) -> anndata.AnnData
+      :abstractmethod:
+
+
+   .. py:method:: basicProcessing(adata) -> None
+
+      Basic Preprocessing Steps, including:
+      1. Filtering cells
+      2. Normalization by counts per cell, every cell has the same total count after normalization
+      3. Logarithm Transformation
+      :param adata: reference data
+      :return: None (Default inplace = True)
+
+
+   .. py:method:: test_prior() -> None
+
+
+
+.. py:class:: BasicPreprocessor
+
+   Bases: :py:obj:`BasePreprocessor`
+
+   Non feature selection.
+
+   .. py:method:: display_params()
+
+
+   .. py:method:: refPreprocessing(ref: anndata.AnnData) -> anndata.AnnData
+
+
+   .. py:method:: queryPreprocessor(query: anndata.AnnData) -> anndata.AnnData
+
+
+
+.. py:class:: HVGPreprocessor(n_hvg: int = 1000)
+
+   Bases: :py:obj:`BasePreprocessor`
+
+   Highly Variable Genes (HVGs) for feature selection.
+   Steps:
+   1. Basic preprocessing
+   2. HVG selection
+
+   .. py:method:: display_params()
+
+
+   .. py:method:: reset_n_hvg(n_hvg: int) -> None
+
+
+   .. py:method:: refPreprocessing(ref: anndata.AnnData) -> anndata.AnnData
+
+
+   .. py:method:: queryPreprocessor(query: anndata.AnnData) -> anndata.AnnData
+
+
+
+.. py:class:: PCAPreprocessor(n_pc: int = 40)
+
+   Bases: :py:obj:`BasePreprocessor`
+
+   Principle Components Analysis for feature selection.
+   Steps:
+   1. Basic preprocessing
+   2. HVG selection
+   3. PC selection
+
+   .. py:method:: display_params()
+
+
+   .. py:method:: refPreprocessing(ref: anndata.AnnData) -> anndata.AnnData
+
+
+   .. py:method:: queryPreprocessor(query: anndata.AnnData) -> anndata.AnnData
+
+
+

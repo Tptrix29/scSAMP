@@ -1,0 +1,18 @@
+:py:mod:`tools.processing`
+==========================
+
+.. py:module:: tools.processing
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   balance/index.rst
+   factors/index.rst
+   preprocessing/index.rst
+   sampler/index.rst
+
+

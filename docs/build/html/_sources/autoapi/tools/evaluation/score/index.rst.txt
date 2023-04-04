@@ -1,0 +1,35 @@
+:py:mod:`tools.evaluation.score`
+================================
+
+.. py:module:: tools.evaluation.score
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.evaluation.score.specific_scores
+
+
+
+.. py:function:: specific_scores(y: numpy.array, y_pred: numpy.array, target: str) -> tuple
+
+   Calculate evaluation scores.
+   :param y: True value
+   :param y_pred: Prediction
+   :param target: Specific type
+   :return: (accuracy, precision, recall, F1-score, cohen-kappa)
+
+   Usage:
+   >>> specific_scores(["A", "B", "C", "A", "B"], ["A", "B", "C", "B", "A"], "A")
+   # (0.2, 0.5, 0.5, 0.5, 0.04761904761904763)
+   >>> specific_scores(["A", "B", "C", "A", "B"], ["B", "B", "C", "B", "A"], "A")
+   (0.0, 0.0, 0.0, 0, 0.08695652173913043)
+
+
+

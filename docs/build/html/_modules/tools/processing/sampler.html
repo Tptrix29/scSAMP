@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.processing.sampler &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tools.processing.sampler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tools.processing.sampler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">anndata</span> <span class="k">as</span> <span class="nn">ad</span>
+<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">imblearn.over_sampling</span> <span class="kn">import</span> <span class="n">SMOTE</span>
+
+<span class="kn">from</span> <span class="nn">tools.utils</span> <span class="kn">import</span> <span class="n">settings</span><span class="p">,</span> <span class="n">_check_obs_key</span><span class="p">,</span> <span class="n">_check_ratio</span>
+<span class="kn">from</span> <span class="nn">tools.processing.balance</span> <span class="kn">import</span> <span class="n">balance_power</span>
+<span class="kn">import</span> <span class="nn">tools.processing.factors</span> <span class="k">as</span> <span class="nn">fc</span>
+<span class="kn">from</span> <span class="nn">tools.config</span> <span class="kn">import</span> <span class="n">SamplingStrategy</span>
+<span class="kn">from</span> <span class="nn">tools.decorator</span> <span class="kn">import</span> <span class="n">time_logging</span>
+
+
+<div class="viewcode-block" id="SamplingProcessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor">[docs]</a><span class="k">class</span> <span class="nc">SamplingProcessor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sampling Processing Class.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -------------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">reference</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+            <span class="n">cluster_col</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">ratio</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+            <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize class with necessary parameters.</span>
+<span class="sd">        :param reference: reference dataset prepared for sampling</span>
+<span class="sd">        :param cluster_col: cell cluster label name</span>
+<span class="sd">        :param ratio: target sampling ratio</span>
+<span class="sd">        :param random_state: random state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ratio</span><span class="p">:</span>
+            <span class="n">_check_ratio</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">:</span> <span class="n">AnnData</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">cluster_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">random_state</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AnnData</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># change index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_count</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="c1"># count and ratio analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                                <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;ratio&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;ratio_balanced&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">balance_power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="SamplingProcessor.sampling"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor.sampling">[docs]</a>    <span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sampling function with strategy parameter.</span>
+<span class="sd">        :param strategy: sampling strategy</span>
+<span class="sd">            Sampling Strategy Option:</span>
+<span class="sd">            ``stratify``:</span>
+<span class="sd">                Classical stratified sampling</span>
+<span class="sd">            ``balance``:</span>
+<span class="sd">                Stratified sampling with balanced ratio</span>
+<span class="sd">            ``compactness``:</span>
+<span class="sd">                Adjusted sampling with intra-cluster compactness factor</span>
+<span class="sd">            ``complexity``:</span>
+<span class="sd">                Adjusted sampling with inter-cluster complexity factor</span>
+<span class="sd">            ``concave``:</span>
+<span class="sd">                Adjusted sampling with concave integration of compactness factor and complexity factor</span>
+<span class="sd">            ``convex``:</span>
+<span class="sd">                Adjusted sampling with convex integration of compactness factor and complexity factor</span>
+<span class="sd">            ``entropy``:</span>
+<span class="sd">                Adjusted sampling with entropy weight integration of compactness factor and complexity factor</span>
+<span class="sd">        :return: sampled dataset as AnnData object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_check_obs_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strategy</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">SamplingStrategy</span><span class="p">]:</span>
+            <span class="k">raise</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid Sampling Strategy &#39;</span><span class="si">{</span><span class="n">strategy</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">strategy</span>
+        <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">STRATIFY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stratify</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">BALANCE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imbalance_sampling</span><span class="p">(</span><span class="n">balance_power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_factor</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imbalance_sampling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">strategy</span><span class="o">+</span><span class="s1">&#39;_balanced&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor.reset_ratio"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor.reset_ratio">[docs]</a>    <span class="k">def</span> <span class="nf">reset_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_check_ratio</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_ratio</span> <span class="o">=</span> <span class="n">ratio</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor.get_target_dataset"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor.get_target_dataset">[docs]</a>    <span class="k">def</span> <span class="nf">get_target_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get sampled dataset.</span>
+<span class="sd">        :return: sampled dataset as AnnData object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">col</span> <span class="k">else</span> <span class="n">col</span>
+        <span class="n">part1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+        <span class="n">part1</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">part1</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="o">=</span><span class="n">part1</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">]])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">part2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+                <span class="n">part2</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">part2</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">obs</span><span class="o">=</span><span class="n">part2</span><span class="o">.</span><span class="n">obs</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">]])</span>
+                <span class="n">part1</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;isRaw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">part2</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;isRaw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">concatenate</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">part1</span><span class="p">,</span> <span class="n">part2</span><span class="p">])</span>
+                <span class="n">concatenate</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">index</span>
+                <span class="k">return</span> <span class="n">concatenate</span>
+        <span class="k">return</span> <span class="n">part1</span></div>
+
+    <span class="c1"># def _calculate_boundary(self, strategy: str) -&gt; (int, float):</span>
+    <span class="c1">#     self._check_factor(strategy)</span>
+    <span class="c1">#     choices: pd.Series = (self.metadata[&#39;count&#39;] / self.metadata[strategy+&#39;_balanced&#39;]).sort_values(ascending=True)</span>
+    <span class="c1">#     i = 0</span>
+    <span class="c1">#     while int(choices[i]) &lt; int(len(choices) * self.metadata.loc[choices.index[i], &#39;count&#39;]):</span>
+    <span class="c1">#         i += 1</span>
+    <span class="c1">#         if i == len(choices):</span>
+    <span class="c1">#             raise RuntimeError(</span>
+    <span class="c1">#                 &quot;This dataset is not suitable for optimizing sample amount, &quot;</span>
+    <span class="c1">#                 &quot;please manually set up sampling ratio&quot;)</span>
+    <span class="c1">#     choice = self.metadata.loc[choices.index[i], :]</span>
+    <span class="c1">#     return int(choices[i]), int(np.abs(choice[strategy+&quot;_balanced&quot;] - choice[&quot;ratio_balanced&quot;]) * 100)</span>
+    <span class="c1">#</span>
+    <span class="c1"># def optimize_amount(self, strategy: str, over_acceptance: Optional[int] = None) -&gt; int:</span>
+    <span class="c1">#     low, acceptance = self._calculate_boundary(strategy)</span>
+    <span class="c1">#     if not over_acceptance:</span>
+    <span class="c1">#         over_acceptance = acceptance</span>
+    <span class="c1">#     if over_acceptance &lt; 0 or over_acceptance &gt;= 50:</span>
+    <span class="c1">#         raise ValueError(f&quot;Invalid oversampling acceptance &#39;{over_acceptance}&#39;, valid range: [0, 50)&quot;)</span>
+    <span class="c1">#     return int(low / (1 - over_acceptance / 100))</span>
+
+<div class="viewcode-block" id="SamplingProcessor.generate_factors"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor.generate_factors">[docs]</a>    <span class="k">def</span> <span class="nf">generate_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">SamplingStrategy</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">BALANCE</span> <span class="ow">and</span> <span class="n">s</span><span class="o">!=</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">STRATIFY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_factor</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor._check_factor"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor._check_factor">[docs]</a>    <span class="k">def</span> <span class="nf">_check_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the existence of specific factor</span>
+<span class="sd">        :param factor_type: factor name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">factor_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">factor_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">factor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">factor_type</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">)]</span> <span class="o">=</span> \
+                    <span class="n">fc</span><span class="o">.</span><span class="n">compactness_factor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">factor_type</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">)]</span> <span class="o">=</span> \
+                    <span class="n">fc</span><span class="o">.</span><span class="n">complexity_factor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_factor</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_factor</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">factor_type</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">CONCAVE</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">CONCAVE</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">concave_2var</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">)],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">)])</span>
+                <span class="k">elif</span> <span class="n">factor_type</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">CONVEX</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">CONVEX</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">convex_2var</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">)],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">)])</span>
+                <span class="k">elif</span> <span class="n">factor_type</span> <span class="o">==</span> <span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">ENTROPY</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">ENTROPY</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">entropy_2var</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPACTNESS</span><span class="p">)],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">SamplingStrategy</span><span class="o">.</span><span class="n">COMPLEXITY</span><span class="p">)])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">factor_type</span> <span class="o">+</span> <span class="s1">&#39;_balanced&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">balance_power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">factor_type</span><span class="p">])</span></div>
+
+    <span class="nd">@time_logging</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;oversampling&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="SamplingProcessor._generate_oversampling"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor._generate_oversampling">[docs]</a>    <span class="k">def</span> <span class="nf">_generate_oversampling</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate oversampling dataset.</span>
+<span class="sd">        SMOTE is the most stable oversampling method (Generate fully-balanced dataset)</span>
+<span class="sd">        Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X_resampled</span><span class="p">,</span> <span class="n">y_resampled</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span> \
+            <span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">])</span>
+        <span class="n">X_resampled</span><span class="p">,</span> <span class="n">y_resampled</span> <span class="o">=</span> <span class="n">X_resampled</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_count</span><span class="p">:,</span> <span class="p">:],</span> <span class="n">y_resampled</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_count</span><span class="p">:]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">y_resampled</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_resampled</span><span class="p">,</span>
+                                            <span class="n">obs</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">:</span> <span class="n">y_resampled</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                            <span class="p">}))</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor._stratify"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor._stratify">[docs]</a>    <span class="k">def</span> <span class="nf">_stratify</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Classical stratified sampling method. &quot;&quot;&quot;</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">])</span>\
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_ratio</span><span class="p">,</span>
+                                   <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="ow">in</span> <span class="n">ind</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_target_dataset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor._imbalance_sampling"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor._imbalance_sampling">[docs]</a>    <span class="k">def</span> <span class="nf">_imbalance_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_ratio</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Imbalanced sampling operation.</span>
+<span class="sd">        :param target_ratio: target sampling ratio for each cluster</span>
+<span class="sd">        :return: sampled dataset as AnnData object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ref_target_index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([])</span>
+        <span class="n">over_target_index</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([])</span>
+
+        <span class="n">target_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_count</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_ratio</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">clst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="n">sample_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">target_ratio</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">target_count</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">sample_count</span> <span class="o">&lt;=</span> <span class="n">clst</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">ref_target_index</span> <span class="o">=</span> <span class="n">ref_target_index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">clst</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">sample_count</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+            <span class="c1"># Oversampling Operation</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ref_target_index</span> <span class="o">=</span> <span class="n">ref_target_index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">clst</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_generate_oversampling</span><span class="p">()</span>
+                <span class="n">partial_clst</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cluster_label</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="c1"># print(f&quot;Parameters: {sample_count-clst.shape[0]}&quot;)</span>
+                <span class="c1"># print(f&quot;partial shape: {partial_clst.shape}, label: {self.metadata.index[i]}&quot;)</span>
+                <span class="n">over_target_index</span> <span class="o">=</span> <span class="n">over_target_index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">partial_clst</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+                        <span class="n">n</span><span class="o">=</span><span class="n">sample_count</span><span class="o">-</span><span class="n">clst</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="ow">in</span> <span class="n">ref_target_index</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">index</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oversampling_dataset</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">latest_label</span><span class="p">]</span> <span class="ow">in</span> <span class="n">over_target_index</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_target_dataset</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SamplingProcessor.to_hdf5"><a class="viewcode-back" href="../../../autoapi/tools/processing/sampler/index.html#tools.processing.sampler.SamplingProcessor.to_hdf5">[docs]</a>    <span class="k">def</span> <span class="nf">to_hdf5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="c1"># def _stratify_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1">#         random_state: int = settings.random_state</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     ind = pd.DataFrame(adata.obs[group_label]).groupby(group_label).apply(</span>
+<span class="c1">#         lambda x: x.sample(frac=ratio, random_state=random_state)</span>
+<span class="c1">#     ).index.droplevel(0)</span>
+<span class="c1">#</span>
+<span class="c1">#     col_label = group_label + &#39;_stratify&#39;</span>
+<span class="c1">#     adata.obs[col_label] = adata.obs.index</span>
+<span class="c1">#     adata.obs[col_label] = pd.Categorical(adata.obs.apply(</span>
+<span class="c1">#         lambda x: True if x[col_label] in ind else False, axis=1</span>
+<span class="c1">#     ))</span>
+<span class="c1">#     return col_label, adata</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _balance_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     # normal initial ratio</span>
+<span class="c1">#     clst_summary = adata.obs.groupby(group_label).apply(</span>
+<span class="c1">#         lambda x: x.shape[0]</span>
+<span class="c1">#     ) / adata.obs.shape[0]</span>
+<span class="c1">#     ratio_arr = balance_power(np.array(clst_summary))</span>
+<span class="c1">#     return _imbalance_processing(adata, group_label, ratio,</span>
+<span class="c1">#                                  group_label + &#39;_balance&#39;,</span>
+<span class="c1">#                                  ratio_arr, clst_summary.index)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _compactness_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     type_info, compactness_vec = fc.compactness_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     ratio_arr = balance_power(np.array(compactness_vec))</span>
+<span class="c1">#     return _imbalance_processing(adata, group_label, ratio,</span>
+<span class="c1">#                                  group_label + &#39;_compactness&#39;,</span>
+<span class="c1">#                                  ratio_arr, type_info)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _complexity_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     type_info, complexity_vec = fc.complexity_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     ratio_arr = balance_power(np.array(complexity_vec))</span>
+<span class="c1">#     return _imbalance_processing(adata, group_label, ratio,</span>
+<span class="c1">#                                  group_label + &#39;_complexity&#39;,</span>
+<span class="c1">#                                  ratio_arr, type_info)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _concave_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     type_info1, compactness_vec = fc.compactness_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     type_info2, complexity_vec = fc.complexity_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     ratio_arr = balance_power(fc.concave_2var(compactness_vec, complexity_vec))</span>
+<span class="c1">#     return _imbalance_processing(adata, group_label, ratio,</span>
+<span class="c1">#                                  group_label + &#39;_concave&#39;,</span>
+<span class="c1">#                                  ratio_arr, type_info1)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _convex_sampling(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     type_info1, compactness_vec = fc.compactness_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     type_info2, complexity_vec = fc.complexity_factor(adata.obs, adata.X, group_label)</span>
+<span class="c1">#     ratio_arr = balance_power(fc.convex_2var(compactness_vec, complexity_vec))</span>
+<span class="c1">#     return _imbalance_processing(adata, group_label, ratio,</span>
+<span class="c1">#                                  group_label + &#39;_convex&#39;,</span>
+<span class="c1">#                                  ratio_arr, type_info1)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def _imbalance_processing(</span>
+<span class="c1">#         adata: AnnData,</span>
+<span class="c1">#         group_label: str,</span>
+<span class="c1">#         ratio: float,</span>
+<span class="c1">#         col_label: str,</span>
+<span class="c1">#         ratio_arr: np.array,</span>
+<span class="c1">#         types: pd.Index,</span>
+<span class="c1">#         random_state: int = settings.random_state,</span>
+<span class="c1"># ) -&gt; (str, AnnData):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Processing sampling ratio with specific strategy.</span>
+<span class="c1">#     When sampling ratio &gt; cluster ratio: Oversampling</span>
+<span class="c1">#     Oversampling Strategy:</span>
+<span class="c1">#     1. BorderlineSMOTE *</span>
+<span class="c1">#     2. ADASYN</span>
+<span class="c1">#     :param adata: AnnData</span>
+<span class="c1">#     :param group_label: cell type label</span>
+<span class="c1">#     :param ratio: sampling ratio</span>
+<span class="c1">#     :param col_label: sampling selection label</span>
+<span class="c1">#     :param ratio_arr: mathematically balanced sampling ratio array for each cluster</span>
+<span class="c1">#     :param clst_summary: sampling ratio array for each cluster</span>
+<span class="c1">#     :param random_state:</span>
+<span class="c1">#     :return:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     total = adata.obs.shape[0] * ratio</span>
+<span class="c1">#     data = pd.DataFrame()</span>
+<span class="c1">#     resampled_part, addition = None, pd.DataFrame()</span>
+<span class="c1">#     for i in range(len(types)):</span>
+<span class="c1">#         clst = adata.obs[adata.obs[group_label] == types[i]]</span>
+<span class="c1">#         sample_count = int(np.round(ratio_arr[i] * total))</span>
+<span class="c1">#         if sample_count &lt;= clst.shape[0]:</span>
+<span class="c1">#             data = pd.concat([data,</span>
+<span class="c1">#                               clst.sample(</span>
+<span class="c1">#                                   n=sample_count, random_state=random_state</span>
+<span class="c1">#                               )])</span>
+<span class="c1">#         # Oversampling</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             # print(&quot;Oversampling&quot;)</span>
+<span class="c1">#             if resampled_part is None:</span>
+<span class="c1">#                 X_resampled, y_resampled = BorderlineSMOTE(random_state=random_state) \</span>
+<span class="c1">#                     .fit_resample(adata.X, adata.obs[group_label])</span>
+<span class="c1">#                 resampled_part = AnnData(X=X_resampled,</span>
+<span class="c1">#                                          obs=pd.DataFrame({</span>
+<span class="c1">#                                              group_label: y_resampled,</span>
+<span class="c1">#                                              col_label: [True for i in range(y_resampled.shape[0])]</span>
+<span class="c1">#                                          }))[adata.shape[0]:, :]</span>
+<span class="c1">#</span>
+<span class="c1">#             partial_clst = resampled_part.obs[resampled_part.obs[group_label] == types[i]]</span>
+<span class="c1">#             # print(f&quot;{types[i]}: {partial_clst}&quot;)</span>
+<span class="c1">#             data = pd.concat([data, clst])</span>
+<span class="c1">#             addition = pd.concat([addition,</span>
+<span class="c1">#                                   partial_clst.sample(n=sample_count - clst.shape[0], random_state=random_state)])</span>
+<span class="c1">#</span>
+<span class="c1">#     ind = data.index</span>
+<span class="c1">#</span>
+<span class="c1">#     adata.obs[col_label] = adata.obs.index</span>
+<span class="c1">#     adata.obs[col_label] = pd.Categorical(adata.obs.apply(</span>
+<span class="c1">#         lambda x: True if x[col_label] in ind else False, axis=1</span>
+<span class="c1">#     ))</span>
+<span class="c1">#     if resampled_part is None:</span>
+<span class="c1">#         return col_label, adata</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         new_adata = AnnData(X=adata.X, obs=adata.obs[[group_label, col_label]])</span>
+<span class="c1">#         new_adata = ad.concat([new_adata, resampled_part[addition.index, :]])</span>
+<span class="c1">#         new_adata.obs[group_label] = pd.Categorical(new_adata.obs[group_label])</span>
+<span class="c1">#         new_adata.obs[col_label] = pd.Categorical(new_adata.obs[col_label])</span>
+<span class="c1">#         return col_label, new_adata</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

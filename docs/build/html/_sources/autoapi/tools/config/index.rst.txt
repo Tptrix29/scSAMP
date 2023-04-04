@@ -1,0 +1,124 @@
+:py:mod:`tools.config`
+======================
+
+.. py:module:: tools.config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   tools.config.SamplingStrategy
+   tools.config.EvaluationStrategy
+
+
+
+
+.. py:class:: SamplingStrategy
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: STRATIFY
+      :type: str
+      :value: 'stratify'
+
+      
+
+   .. py:attribute:: BALANCE
+      :type: str
+      :value: 'balance'
+
+      
+
+   .. py:attribute:: COMPACTNESS
+      :type: str
+      :value: 'compactness'
+
+      
+
+   .. py:attribute:: COMPLEXITY
+      :type: str
+      :value: 'complexity'
+
+      
+
+   .. py:attribute:: CONCAVE
+      :type: str
+      :value: 'concave'
+
+      
+
+   .. py:attribute:: CONVEX
+      :type: str
+      :value: 'convex'
+
+      
+
+   .. py:attribute:: ENTROPY
+      :type: str
+      :value: 'entropy'
+
+      
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __iter__()
+
+
+
+.. py:class:: EvaluationStrategy
+
+   Bases: :py:obj:`enum.Enum`
+
+   Generic enumeration.
+
+   Derive from this class to define new enumerations.
+
+   .. py:attribute:: SVM
+      :type: str
+      :value: 'svm'
+
+      
+
+   .. py:attribute:: ACTINN
+      :type: str
+      :value: 'actinn'
+
+      
+
+   .. py:method:: __str__()
+
+      Return str(self).
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+

@@ -1,0 +1,26 @@
+:py:mod:`tools.decorator`
+=========================
+
+.. py:module:: tools.decorator
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.decorator.eval_metrics
+   tools.decorator.time_logging
+
+
+
+.. py:function:: eval_metrics(eval_func)
+
+
+.. py:function:: time_logging(mode: str)
+
+

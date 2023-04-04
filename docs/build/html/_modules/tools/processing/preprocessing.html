@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.processing.preprocessing &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tools.processing.preprocessing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tools.processing.preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABCMeta</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Logging: BasePreprocessor</span>
+<span class="sd">- Basic Preprocessing</span>
+<span class="sd">- HVG Preprocessor</span>
+<span class="sd">- PCA Preprocessor</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="BasePreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor">[docs]</a><span class="k">class</span> <span class="nc">BasePreprocessor</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_prior</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;cells_threshold&#39;</span><span class="p">:</span>  <span class="mi">3</span><span class="p">,</span>
+            <span class="s1">&#39;genes_threshold&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+            <span class="s1">&#39;target_threshold&#39;</span><span class="p">:</span> <span class="mf">1e4</span><span class="p">,</span>
+            <span class="s1">&#39;max_threshold&#39;</span><span class="p">:</span> <span class="mi">10</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="BasePreprocessor.reset_params"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.reset_params">[docs]</a>    <span class="k">def</span> <span class="nf">reset_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">cells_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                     <span class="n">genes_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+                     <span class="n">target_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">1e4</span><span class="p">,</span>
+                     <span class="n">max_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+                     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;cells_threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cells_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;cells_threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genes_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;cells_threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;cells_threshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_threshold</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="BasePreprocessor.display_params"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.display_params">[docs]</a>    <span class="k">def</span> <span class="nf">display_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="BasePreprocessor.refPreprocessing"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.refPreprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">refPreprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="BasePreprocessor.queryPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.queryPreprocessor">[docs]</a>    <span class="k">def</span> <span class="nf">queryPreprocessor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="BasePreprocessor.basicProcessing"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.basicProcessing">[docs]</a>    <span class="k">def</span> <span class="nf">basicProcessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Basic Preprocessing Steps, including:</span>
+<span class="sd">        1. Filtering cells</span>
+<span class="sd">        2. Normalization by counts per cell, every cell has the same total count after normalization</span>
+<span class="sd">        3. Logarithm Transformation</span>
+<span class="sd">        :param adata: reference data</span>
+<span class="sd">        :return: None (Default inplace = True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_cells</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">min_genes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;genes_threshold&#39;</span><span class="p">])</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">normalize_total</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">target_sum</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;target_threshold&#39;</span><span class="p">])</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasePreprocessor.test_prior"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasePreprocessor.test_prior">[docs]</a>    <span class="k">def</span> <span class="nf">test_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_prior</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Use &#39;refPreprocessing&#39; to get index first.&quot;</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="BasicPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasicPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">BasicPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Non feature selection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BasicPreprocessor.display_params"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasicPreprocessor.display_params">[docs]</a>    <span class="k">def</span> <span class="nf">display_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">display_params</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BasicPreprocessor.refPreprocessing"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasicPreprocessor.refPreprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">refPreprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">filter_genes</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">min_cells</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;cells_threshold&#39;</span><span class="p">])</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">basicProcessing</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">ref</span><span class="p">)</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;max_threshold&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">var_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_prior</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">ref</span></div>
+
+<div class="viewcode-block" id="BasicPreprocessor.queryPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.BasicPreprocessor.queryPreprocessor">[docs]</a>    <span class="k">def</span> <span class="nf">queryPreprocessor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">test_prior</span><span class="p">()</span>
+        <span class="n">new_query</span> <span class="o">=</span> <span class="n">query</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">basicProcessing</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">new_query</span><span class="p">)</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">new_query</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;max_threshold&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">new_query</span></div></div>
+
+
+<div class="viewcode-block" id="HVGPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.HVGPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">HVGPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Highly Variable Genes (HVGs) for feature selection.</span>
+<span class="sd">    Steps:</span>
+<span class="sd">    1. Basic preprocessing</span>
+<span class="sd">    2. HVG selection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_hvg</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_hvg</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">n_hvg</span>
+
+<div class="viewcode-block" id="HVGPreprocessor.display_params"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.HVGPreprocessor.display_params">[docs]</a>    <span class="k">def</span> <span class="nf">display_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">display_params</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;HVG Number: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_hvg</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HVGPreprocessor.reset_n_hvg"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.HVGPreprocessor.reset_n_hvg">[docs]</a>    <span class="k">def</span> <span class="nf">reset_n_hvg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_hvg</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_hvg</span> <span class="o">=</span> <span class="n">n_hvg</span></div>
+
+<div class="viewcode-block" id="HVGPreprocessor.refPreprocessing"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.HVGPreprocessor.refPreprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">refPreprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">basicProcessing</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">ref</span><span class="p">)</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">highly_variable_genes</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">n_top_genes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_hvg</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="n">ref</span><span class="o">.</span><span class="n">var</span><span class="p">[</span><span class="s1">&#39;highly_variable&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_prior</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span><span class="p">]</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;max_threshold&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ref</span></div>
+
+<div class="viewcode-block" id="HVGPreprocessor.queryPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.HVGPreprocessor.queryPreprocessor">[docs]</a>    <span class="k">def</span> <span class="nf">queryPreprocessor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">test_prior</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">basicProcessing</span><span class="p">(</span><span class="n">adata</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">new_query</span> <span class="o">=</span> <span class="n">query</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gene_index</span><span class="p">]</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">pp</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">new_query</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">basic_params</span><span class="p">[</span><span class="s1">&#39;max_threshold&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">new_query</span></div></div>
+
+
+<div class="viewcode-block" id="PCAPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.PCAPreprocessor">[docs]</a><span class="k">class</span> <span class="nc">PCAPreprocessor</span><span class="p">(</span><span class="n">BasePreprocessor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Principle Components Analysis for feature selection.</span>
+<span class="sd">    Steps:</span>
+<span class="sd">    1. Basic preprocessing</span>
+<span class="sd">    2. HVG selection</span>
+<span class="sd">    3. PC selection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_pc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_pc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">n_pc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trans_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PCAPreprocessor.display_params"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.PCAPreprocessor.display_params">[docs]</a>    <span class="k">def</span> <span class="nf">display_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">display_params</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;PC Number: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_pc</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Transformation Matirx Shape: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">trans_matrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PCAPreprocessor.refPreprocessing"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.PCAPreprocessor.refPreprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">refPreprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="c1"># sc.tl.pca(adata, svd_solver=&#39;arpack&#39;)</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PCAPreprocessor.queryPreprocessor"><a class="viewcode-back" href="../../../autoapi/tools/processing/preprocessing/index.html#tools.processing.preprocessing.PCAPreprocessor.queryPreprocessor">[docs]</a>    <span class="k">def</span> <span class="nf">queryPreprocessor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnnData</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

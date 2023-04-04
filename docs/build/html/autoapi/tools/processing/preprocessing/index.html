@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.processing.preprocessing &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.preprocessing</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/tools/processing/preprocessing/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-tools.processing.preprocessing">
+<span id="tools-processing-preprocessing"></span><h1><a class="reference internal" href="#module-tools.processing.preprocessing" title="tools.processing.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.preprocessing</span></code></a><a class="headerlink" href="#module-tools.processing.preprocessing" title="Permalink to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tools.processing.preprocessing.BasePreprocessor" title="tools.processing.preprocessing.BasePreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePreprocessor</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tools.processing.preprocessing.BasicPreprocessor" title="tools.processing.preprocessing.BasicPreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasicPreprocessor</span></code></a></p></td>
+<td><p>Non feature selection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tools.processing.preprocessing.HVGPreprocessor" title="tools.processing.preprocessing.HVGPreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HVGPreprocessor</span></code></a></p></td>
+<td><p>Highly Variable Genes (HVGs) for feature selection.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tools.processing.preprocessing.PCAPreprocessor" title="tools.processing.preprocessing.PCAPreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PCAPreprocessor</span></code></a></p></td>
+<td><p>Principle Components Analysis for feature selection.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.preprocessing.</span></span><span class="sig-name descname"><span class="pre">BasePreprocessor</span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.reset_params">
+<span class="sig-name descname"><span class="pre">reset_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cells_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">genes_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.reset_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.reset_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.display_params">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">display_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.display_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.display_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.refPreprocessing">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">refPreprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.refPreprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.refPreprocessing" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.queryPreprocessor">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">queryPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.queryPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.queryPreprocessor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.basicProcessing">
+<span class="sig-name descname"><span class="pre">basicProcessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.basicProcessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.basicProcessing" title="Permalink to this definition"></a></dt>
+<dd><p>Basic Preprocessing Steps, including:
+1. Filtering cells
+2. Normalization by counts per cell, every cell has the same total count after normalization
+3. Logarithm Transformation
+:param adata: reference data
+:return: None (Default inplace = True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasePreprocessor.test_prior">
+<span class="sig-name descname"><span class="pre">test_prior</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasePreprocessor.test_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasePreprocessor.test_prior" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasicPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.preprocessing.</span></span><span class="sig-name descname"><span class="pre">BasicPreprocessor</span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasicPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasicPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tools.processing.preprocessing.BasePreprocessor" title="tools.processing.preprocessing.BasePreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePreprocessor</span></code></a></p>
+<p>Non feature selection.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasicPreprocessor.display_params">
+<span class="sig-name descname"><span class="pre">display_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasicPreprocessor.display_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasicPreprocessor.display_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasicPreprocessor.refPreprocessing">
+<span class="sig-name descname"><span class="pre">refPreprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasicPreprocessor.refPreprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasicPreprocessor.refPreprocessing" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.BasicPreprocessor.queryPreprocessor">
+<span class="sig-name descname"><span class="pre">queryPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#BasicPreprocessor.queryPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.BasicPreprocessor.queryPreprocessor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.HVGPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.preprocessing.</span></span><span class="sig-name descname"><span class="pre">HVGPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_hvg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#HVGPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.HVGPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tools.processing.preprocessing.BasePreprocessor" title="tools.processing.preprocessing.BasePreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePreprocessor</span></code></a></p>
+<p>Highly Variable Genes (HVGs) for feature selection.
+Steps:
+1. Basic preprocessing
+2. HVG selection</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.HVGPreprocessor.display_params">
+<span class="sig-name descname"><span class="pre">display_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#HVGPreprocessor.display_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.HVGPreprocessor.display_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.HVGPreprocessor.reset_n_hvg">
+<span class="sig-name descname"><span class="pre">reset_n_hvg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_hvg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#HVGPreprocessor.reset_n_hvg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.HVGPreprocessor.reset_n_hvg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.HVGPreprocessor.refPreprocessing">
+<span class="sig-name descname"><span class="pre">refPreprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#HVGPreprocessor.refPreprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.HVGPreprocessor.refPreprocessing" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.HVGPreprocessor.queryPreprocessor">
+<span class="sig-name descname"><span class="pre">queryPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#HVGPreprocessor.queryPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.HVGPreprocessor.queryPreprocessor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.PCAPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.preprocessing.</span></span><span class="sig-name descname"><span class="pre">PCAPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#PCAPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.PCAPreprocessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#tools.processing.preprocessing.BasePreprocessor" title="tools.processing.preprocessing.BasePreprocessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasePreprocessor</span></code></a></p>
+<p>Principle Components Analysis for feature selection.
+Steps:
+1. Basic preprocessing
+2. HVG selection
+3. PC selection</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.PCAPreprocessor.display_params">
+<span class="sig-name descname"><span class="pre">display_params</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#PCAPreprocessor.display_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.PCAPreprocessor.display_params" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.PCAPreprocessor.refPreprocessing">
+<span class="sig-name descname"><span class="pre">refPreprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#PCAPreprocessor.refPreprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.PCAPreprocessor.refPreprocessing" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.preprocessing.PCAPreprocessor.queryPreprocessor">
+<span class="sig-name descname"><span class="pre">queryPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/preprocessing.html#PCAPreprocessor.queryPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.preprocessing.PCAPreprocessor.queryPreprocessor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+:py:mod:`tools.processing.factors`
+==================================
+
+.. py:module:: tools.processing.factors
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.processing.factors._compactness
+   tools.processing.factors._proto_concave
+   tools.processing.factors._proto_convex
+   tools.processing.factors._entropy_1d
+   tools.processing.factors.compactness_factor
+   tools.processing.factors.complexity_factor
+   tools.processing.factors.concave_2var
+   tools.processing.factors.convex_2var
+   tools.processing.factors.entropy_2var
+
+
+
+.. py:function:: _compactness(data: numpy.array) -> float
+
+
+.. py:function:: _proto_concave(X: numpy.array) -> numpy.array
+
+
+.. py:function:: _proto_convex(X: numpy.array) -> numpy.array
+
+
+.. py:function:: _entropy_1d(X: numpy.array) -> numpy.array
+
+
+.. py:function:: compactness_factor(info_data: pandas.DataFrame, numeric_arr: numpy.array, label: str) -> (pandas.Index, numpy.array)
+
+   Compactness Factor Calculation
+       compactness-factor = 1 - compactness
+   :param info_data: dataframe including cluster info
+   :param numeric_arr: expression matrix
+   :param label: cluster label name
+   :return: (cluster types info, compactness factor array)
+
+
+.. py:function:: complexity_factor(info_data: pandas.DataFrame, numeric_arr: numpy.array, label: str) -> (pandas.Index, numpy.array)
+
+   Complexity Factor Calculation:
+       complexity-factor = complexity
+   :param info_data: dataframe including cluster info
+   :param numeric_arr: expression matrix
+   :param label: cluster label name
+   :return: (cluster types info, complexity factor array)
+
+
+.. py:function:: concave_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
+
+   Concave Integration
+   :param vec1: compactness factor
+   :param vec2: complexity factor
+   :return: concave index
+
+
+.. py:function:: convex_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
+
+   Convex Integration
+   :param vec1: compactness factor
+   :param vec2: complexity factor
+   :return: convex index
+
+
+.. py:function:: entropy_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
+
+   Entropy Integration
+   :param vec1: compactness factor
+   :param vec2: complexity factor
+   :return: integrated index with entropy weight
+
+

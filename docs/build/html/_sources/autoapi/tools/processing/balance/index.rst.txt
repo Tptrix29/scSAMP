@@ -1,0 +1,43 @@
+:py:mod:`tools.processing.balance`
+==================================
+
+.. py:module:: tools.processing.balance
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tools.processing.balance.balance_power
+   tools.processing.balance.balance_inv_sigmoid
+   tools.processing.balance.balance_tan
+
+
+
+.. py:function:: balance_power(x: numpy.array, a: float = 3) -> numpy.array
+
+   Balance function in power format. (Symmetric)
+   :param x: 1-d array
+   :param a: scale factor
+   :return: 1-d array
+
+
+.. py:function:: balance_inv_sigmoid(x: numpy.array) -> numpy.array
+
+   Balance function in inverse sigmoid format. (Asymmetric)
+   :param x: 1-d array
+   :return: 1-d array
+
+
+.. py:function:: balance_tan(x: numpy.array) -> numpy.array
+
+   Balance function in tangent format. (Symmetric)
+   :param x: 1-d array
+   :return: 1-d array
+
+

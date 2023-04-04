@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.evaluation.model.actinn &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tools.evaluation.model.actinn</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tools.evaluation.model.actinn</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.framework</span> <span class="kn">import</span> <span class="n">ops</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<div class="viewcode-block" id="run_time"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.run_time">[docs]</a><span class="n">run_time</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">default_timer</span><span class="p">()</span></div>
+
+
+<span class="c1"># Get common genes, normalize  and scale the sets</span>
+<span class="c1"># def scale_sets(sets):</span>
+<span class="c1">#     # input -- a list of all the sets to be scaled</span>
+<span class="c1">#     # output -- scaled sets</span>
+<span class="c1">#     common_genes = set(sets[0].index)</span>
+<span class="c1">#     for i in range(1, len(sets)):</span>
+<span class="c1">#         common_genes = set.intersection(set(sets[i].index),common_genes)</span>
+<span class="c1">#     common_genes = sorted(list(common_genes))</span>
+<span class="c1">#     sep_point = [0]</span>
+<span class="c1">#     for i in range(len(sets)):</span>
+<span class="c1">#         sets[i] = sets[i].loc[common_genes,]</span>
+<span class="c1">#         sep_point.append(sets[i].shape[1])</span>
+<span class="c1">#     total_set = np.array(pd.concat(sets, axis=1, sort=False), dtype=np.float32)</span>
+<span class="c1">#     total_set = np.divide(total_set, np.sum(total_set, axis=0, keepdims=True)) * 10000</span>
+<span class="c1">#     total_set = np.log2(total_set+1)</span>
+<span class="c1">#     expr = np.sum(total_set, axis=1)</span>
+<span class="c1">#     total_set = total_set[np.logical_and(expr &gt;= np.percentile(expr, 1), expr &lt;= np.percentile(expr, 99)),]</span>
+<span class="c1">#     cv = np.std(total_set, axis=1) / np.mean(total_set, axis=1)</span>
+<span class="c1">#     total_set = total_set[np.logical_and(cv &gt;= np.percentile(cv, 1), cv &lt;= np.percentile(cv, 99)),]</span>
+<span class="c1">#     for i in range(len(sets)):</span>
+<span class="c1">#         sets[i] = total_set[:, sum(sep_point[:(i+1)]):sum(sep_point[:(i+2)])]</span>
+<span class="c1">#     return sets</span>
+
+
+<span class="c1"># Turn labels into matrix</span>
+<div class="viewcode-block" id="one_hot_matrix"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.one_hot_matrix">[docs]</a><span class="k">def</span> <span class="nf">one_hot_matrix</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+    <span class="c1"># input -- labels (true labels of the sets), C (# types)</span>
+    <span class="c1"># output -- one hot matrix with shape (# types, # samples)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">disable_eager_execution</span><span class="p">()</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">one_hot_matrix</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">one_hot</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># sess = tf.Session()</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+    <span class="n">one_hot</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">one_hot_matrix</span><span class="p">)</span>
+    <span class="n">sess</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">one_hot</span></div>
+
+
+<span class="c1"># Make types to labels dictionary</span>
+<div class="viewcode-block" id="type_to_label_dict"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.type_to_label_dict">[docs]</a><span class="k">def</span> <span class="nf">type_to_label_dict</span><span class="p">(</span><span class="n">types</span><span class="p">):</span>
+    <span class="c1"># input -- types</span>
+    <span class="c1"># output -- type_to_label dictionary</span>
+    <span class="n">type_to_label_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">all_type</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">types</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_type</span><span class="p">)):</span>
+        <span class="n">type_to_label_dict</span><span class="p">[</span><span class="n">all_type</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">type_to_label_dict</span></div>
+
+
+<span class="c1"># Convert types to labels</span>
+<div class="viewcode-block" id="convert_type_to_label"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.convert_type_to_label">[docs]</a><span class="k">def</span> <span class="nf">convert_type_to_label</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="n">type_to_label_dict</span><span class="p">):</span>
+    <span class="c1"># input -- list of types, and type_to_label dictionary</span>
+    <span class="c1"># output -- list of labels</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">types</span><span class="p">:</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">type_to_label_dict</span><span class="p">[</span><span class="nb">type</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">labels</span></div>
+
+
+<span class="c1"># Function to create placeholders</span>
+<div class="viewcode-block" id="create_placeholders"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.create_placeholders">[docs]</a><span class="k">def</span> <span class="nf">create_placeholders</span><span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="n">n_y</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_x</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_y</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span></div>
+
+
+<span class="c1"># Initialize parameters</span>
+<div class="viewcode-block" id="initialize_parameters"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.initialize_parameters">[docs]</a><span class="k">def</span> <span class="nf">initialize_parameters</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">ln1</span><span class="p">,</span> <span class="n">ln2</span><span class="p">,</span> <span class="n">ln3</span><span class="p">,</span> <span class="n">nt</span><span class="p">):</span>
+    <span class="c1"># input -- nf (# of features), ln1 (# nodes in layer1), ln2 (# nodes in layer2), nt (# types)</span>
+    <span class="c1"># output -- a dictionary of tensors containing W1, b1, W2, b2, W3, b3</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">set_random_seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># set seed to make the results consistant</span>
+    <span class="n">W1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;W1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln1</span><span class="p">,</span> <span class="n">nf</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">glorot_normal</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;b1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros_initializer</span><span class="p">())</span>
+    <span class="n">W2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;W2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln2</span><span class="p">,</span> <span class="n">ln1</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">glorot_normal</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;b2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros_initializer</span><span class="p">())</span>
+    <span class="n">W3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;W3&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln3</span><span class="p">,</span> <span class="n">ln2</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">glorot_normal</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;b3&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">ln3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros_initializer</span><span class="p">())</span>
+    <span class="n">W4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;W4&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">nt</span><span class="p">,</span> <span class="n">ln3</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">initializers</span><span class="o">.</span><span class="n">glorot_normal</span><span class="p">(</span><span class="n">seed</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">b4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;b4&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">nt</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">initializer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">zeros_initializer</span><span class="p">())</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;W1&quot;</span><span class="p">:</span> <span class="n">W1</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">:</span> <span class="n">b1</span><span class="p">,</span> <span class="s2">&quot;W2&quot;</span><span class="p">:</span> <span class="n">W2</span><span class="p">,</span> <span class="s2">&quot;b2&quot;</span><span class="p">:</span> <span class="n">b2</span><span class="p">,</span> <span class="s2">&quot;W3&quot;</span><span class="p">:</span> <span class="n">W3</span><span class="p">,</span> <span class="s2">&quot;b3&quot;</span><span class="p">:</span> <span class="n">b3</span><span class="p">,</span> <span class="s2">&quot;W4&quot;</span><span class="p">:</span> <span class="n">W4</span><span class="p">,</span> <span class="s2">&quot;b4&quot;</span><span class="p">:</span> <span class="n">b4</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<span class="c1"># Forward propagation function</span>
+<div class="viewcode-block" id="forward_propagation"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.forward_propagation">[docs]</a><span class="k">def</span> <span class="nf">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="c1"># function model: LINEAR -&gt; RELU -&gt; LINEAR -&gt; RELU -&gt; LINEAR -&gt; SOFTMAX</span>
+    <span class="c1"># input -- dataset with shape (# features, # sample), parameters &quot;W1&quot;, &quot;b1&quot;, &quot;W2&quot;, &quot;b2&quot;, &quot;W3&quot;, &quot;b3&quot;</span>
+    <span class="c1"># output -- the output of the last linear unit</span>
+    <span class="n">W1</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W1&#39;</span><span class="p">]</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b1&#39;</span><span class="p">]</span>
+    <span class="n">W2</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W2&#39;</span><span class="p">]</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+    <span class="n">W3</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W3&#39;</span><span class="p">]</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b3&#39;</span><span class="p">]</span>
+    <span class="n">W4</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W4&#39;</span><span class="p">]</span>
+    <span class="n">b4</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b4&#39;</span><span class="p">]</span>
+    <span class="c1"># forward calculations</span>
+    <span class="n">Z1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W1</span><span class="p">,</span> <span class="n">X</span><span class="p">),</span> <span class="n">b1</span><span class="p">)</span>
+    <span class="n">A1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z1</span><span class="p">)</span>
+    <span class="n">Z2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W2</span><span class="p">,</span> <span class="n">A1</span><span class="p">),</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="n">A2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z2</span><span class="p">)</span>
+    <span class="n">Z3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W3</span><span class="p">,</span> <span class="n">A2</span><span class="p">),</span> <span class="n">b3</span><span class="p">)</span>
+    <span class="n">A3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z3</span><span class="p">)</span>
+    <span class="n">Z4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W4</span><span class="p">,</span> <span class="n">A3</span><span class="p">),</span> <span class="n">b4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Z4</span></div>
+
+
+<span class="c1"># Compute cost</span>
+<div class="viewcode-block" id="compute_cost"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.compute_cost">[docs]</a><span class="k">def</span> <span class="nf">compute_cost</span><span class="p">(</span><span class="n">Z4</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">lambd</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="c1"># input -- Z3 (output of forward propagation with shape (# types, # samples)), Y (true labels, same shape as Z3)</span>
+    <span class="c1"># output -- tensor of teh cost function</span>
+    <span class="n">logits</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Z4</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax_cross_entropy_with_logits_v2</span><span class="p">(</span><span class="n">logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="p">))</span> <span class="o">+</span> \
+    <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">l2_loss</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W1&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">l2_loss</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W2&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">l2_loss</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W3&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">l2_loss</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W4&quot;</span><span class="p">]))</span> <span class="o">*</span> <span class="n">lambd</span>
+    <span class="k">return</span> <span class="n">cost</span></div>
+
+
+<span class="c1"># Get the mini batches</span>
+<div class="viewcode-block" id="random_mini_batches"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.random_mini_batches">[docs]</a><span class="k">def</span> <span class="nf">random_mini_batches</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">mini_batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="c1"># input -- X (training set), Y (true labels)</span>
+    <span class="c1"># output -- mini batches</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">mini_batches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="c1"># shuffle (X, Y)</span>
+    <span class="n">permutation</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">ns</span><span class="p">))</span>
+    <span class="n">shuffled_X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">permutation</span><span class="p">]</span>
+    <span class="n">shuffled_Y</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[:,</span> <span class="n">permutation</span><span class="p">]</span>
+    <span class="c1"># partition (shuffled_X, shuffled_Y), minus the end case.</span>
+    <span class="n">num_complete_minibatches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">ns</span><span class="o">/</span><span class="n">mini_batch_size</span><span class="p">))</span> <span class="c1"># number of mini batches of size mini_batch_size in your partitionning</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_complete_minibatches</span><span class="p">):</span>
+        <span class="n">mini_batch_X</span> <span class="o">=</span> <span class="n">shuffled_X</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="o">+</span> <span class="n">mini_batch_size</span><span class="p">]</span>
+        <span class="n">mini_batch_Y</span> <span class="o">=</span> <span class="n">shuffled_Y</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="p">:</span> <span class="n">k</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="o">+</span> <span class="n">mini_batch_size</span><span class="p">]</span>
+        <span class="n">mini_batch</span> <span class="o">=</span> <span class="p">(</span><span class="n">mini_batch_X</span><span class="p">,</span> <span class="n">mini_batch_Y</span><span class="p">)</span>
+        <span class="n">mini_batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini_batch</span><span class="p">)</span>
+    <span class="c1"># handling the end case (last mini-batch &lt; mini_batch_size)</span>
+    <span class="k">if</span> <span class="n">ns</span> <span class="o">%</span> <span class="n">mini_batch_size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">mini_batch_X</span> <span class="o">=</span> <span class="n">shuffled_X</span><span class="p">[:,</span> <span class="n">num_complete_minibatches</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="p">:</span> <span class="n">ns</span><span class="p">]</span>
+        <span class="n">mini_batch_Y</span> <span class="o">=</span> <span class="n">shuffled_Y</span><span class="p">[:,</span> <span class="n">num_complete_minibatches</span> <span class="o">*</span> <span class="n">mini_batch_size</span> <span class="p">:</span> <span class="n">ns</span><span class="p">]</span>
+        <span class="n">mini_batch</span> <span class="o">=</span> <span class="p">(</span><span class="n">mini_batch_X</span><span class="p">,</span> <span class="n">mini_batch_Y</span><span class="p">)</span>
+        <span class="n">mini_batches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini_batch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mini_batches</span></div>
+
+
+<span class="c1"># Forward propagation for prediction</span>
+<div class="viewcode-block" id="forward_propagation_for_predict"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.forward_propagation_for_predict">[docs]</a><span class="k">def</span> <span class="nf">forward_propagation_for_predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="c1"># input -- X (dataset used to make prediction), papameters after training</span>
+    <span class="c1"># output -- the output of the last linear unit</span>
+    <span class="n">W1</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W1&#39;</span><span class="p">]</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b1&#39;</span><span class="p">]</span>
+    <span class="n">W2</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W2&#39;</span><span class="p">]</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b2&#39;</span><span class="p">]</span>
+    <span class="n">W3</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W3&#39;</span><span class="p">]</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b3&#39;</span><span class="p">]</span>
+    <span class="n">W4</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;W4&#39;</span><span class="p">]</span>
+    <span class="n">b4</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;b4&#39;</span><span class="p">]</span>
+    <span class="n">Z1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W1</span><span class="p">,</span> <span class="n">X</span><span class="p">),</span> <span class="n">b1</span><span class="p">)</span>
+    <span class="n">A1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z1</span><span class="p">)</span>
+    <span class="n">Z2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W2</span><span class="p">,</span> <span class="n">A1</span><span class="p">),</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="n">A2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z2</span><span class="p">)</span>
+    <span class="n">Z3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W3</span><span class="p">,</span> <span class="n">A2</span><span class="p">),</span> <span class="n">b3</span><span class="p">)</span>
+    <span class="n">A3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">Z3</span><span class="p">)</span>
+    <span class="n">Z4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">W4</span><span class="p">,</span> <span class="n">A3</span><span class="p">),</span> <span class="n">b4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Z4</span></div>
+
+
+<span class="c1"># # Predict function</span>
+<span class="c1"># def predict(X, parameters):</span>
+<span class="c1">#     # input -- X (dataset used to make prediction), papameters after training</span>
+<span class="c1">#     # output -- prediction</span>
+<span class="c1">#     W1 = tf.convert_to_tensor(parameters[&quot;W1&quot;])</span>
+<span class="c1">#     b1 = tf.convert_to_tensor(parameters[&quot;b1&quot;])</span>
+<span class="c1">#     W2 = tf.convert_to_tensor(parameters[&quot;W2&quot;])</span>
+<span class="c1">#     b2 = tf.convert_to_tensor(parameters[&quot;b2&quot;])</span>
+<span class="c1">#     W3 = tf.convert_to_tensor(parameters[&quot;W3&quot;])</span>
+<span class="c1">#     b3 = tf.convert_to_tensor(parameters[&quot;b3&quot;])</span>
+<span class="c1">#     W4 = tf.convert_to_tensor(parameters[&quot;W4&quot;])</span>
+<span class="c1">#     b4 = tf.convert_to_tensor(parameters[&quot;b4&quot;])</span>
+<span class="c1">#     params = {&quot;W1&quot;: W1, &quot;b1&quot;: b1, &quot;W2&quot;: W2, &quot;b2&quot;: b2, &quot;W3&quot;: W3, &quot;b3&quot;: b3, &quot;W4&quot;: W4, &quot;b4&quot;: b4}</span>
+<span class="c1">#     x = tf.compat.v1.placeholder(&quot;float&quot;)</span>
+<span class="c1">#     z4 = forward_propagation_for_predict(x, params)</span>
+<span class="c1">#     p = tf.argmax(z4)</span>
+<span class="c1">#     sess = tf.compat.v1.Session()</span>
+<span class="c1">#     prediction = sess.run(p, feed_dict = {x: X})</span>
+<span class="c1">#     return prediction</span>
+
+
+<div class="viewcode-block" id="predict_probability"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.predict_probability">[docs]</a><span class="k">def</span> <span class="nf">predict_probability</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+    <span class="c1"># input -- X (dataset used to make prediction), papameters after training</span>
+    <span class="c1"># output -- prediction</span>
+    <span class="n">W1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W1&quot;</span><span class="p">])</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b1&quot;</span><span class="p">])</span>
+    <span class="n">W2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W2&quot;</span><span class="p">])</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b2&quot;</span><span class="p">])</span>
+    <span class="n">W3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W3&quot;</span><span class="p">])</span>
+    <span class="n">b3</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b3&quot;</span><span class="p">])</span>
+    <span class="n">W4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;W4&quot;</span><span class="p">])</span>
+    <span class="n">b4</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">convert_to_tensor</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;b4&quot;</span><span class="p">])</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;W1&quot;</span><span class="p">:</span> <span class="n">W1</span><span class="p">,</span> <span class="s2">&quot;b1&quot;</span><span class="p">:</span> <span class="n">b1</span><span class="p">,</span> <span class="s2">&quot;W2&quot;</span><span class="p">:</span> <span class="n">W2</span><span class="p">,</span> <span class="s2">&quot;b2&quot;</span><span class="p">:</span> <span class="n">b2</span><span class="p">,</span> <span class="s2">&quot;W3&quot;</span><span class="p">:</span> <span class="n">W3</span><span class="p">,</span> <span class="s2">&quot;b3&quot;</span><span class="p">:</span> <span class="n">b3</span><span class="p">,</span> <span class="s2">&quot;W4&quot;</span><span class="p">:</span> <span class="n">W4</span><span class="p">,</span> <span class="s2">&quot;b4&quot;</span><span class="p">:</span> <span class="n">b4</span><span class="p">}</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+    <span class="n">z4</span> <span class="o">=</span> <span class="n">forward_propagation_for_predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">z4</span><span class="p">)</span>
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">feed_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">X</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">prediction</span></div>
+
+
+<span class="c1"># Build the model</span>
+<div class="viewcode-block" id="model"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.model">[docs]</a><span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">starting_learning_rate</span> <span class="o">=</span> <span class="mf">0.0001</span><span class="p">,</span> <span class="n">num_epochs</span> <span class="o">=</span> <span class="mi">1500</span><span class="p">,</span> <span class="n">minibatch_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span> <span class="n">print_cost</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># input -- X_train (training set), Y_train(training labels), X_test (test set), Y_test (test labels),</span>
+    <span class="c1"># output -- trained parameters</span>
+    <span class="n">ops</span><span class="o">.</span><span class="n">reset_default_graph</span><span class="p">()</span> <span class="c1"># to be able to rerun the model without overwriting tf variables</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">set_random_seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">nt</span> <span class="o">=</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># create placeholders of shape (nf, nt)</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">create_placeholders</span><span class="p">(</span><span class="n">nf</span><span class="p">,</span> <span class="n">nt</span><span class="p">)</span>
+    <span class="c1"># initialize parameters</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">initialize_parameters</span><span class="p">(</span><span class="n">nf</span><span class="o">=</span><span class="n">nf</span><span class="p">,</span> <span class="n">ln1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ln2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ln3</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">nt</span><span class="o">=</span><span class="n">nt</span><span class="p">)</span>
+    <span class="c1"># forward propagation: build the forward propagation in the tensorflow graph</span>
+    <span class="n">Z4</span> <span class="o">=</span> <span class="n">forward_propagation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="c1"># cost function: add cost function to tensorflow graph</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">compute_cost</span><span class="p">(</span><span class="n">Z4</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">)</span>
+    <span class="c1"># Use learning rate decay</span>
+    <span class="n">global_step</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">exponential_decay</span><span class="p">(</span><span class="n">starting_learning_rate</span><span class="p">,</span> <span class="n">global_step</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="n">staircase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># backpropagation: define the tensorflow optimizer, AdamOptimizer is used.</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="n">global_step</span><span class="p">)</span>
+    <span class="c1"># initialize all the variables</span>
+    <span class="n">init</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span>
+    <span class="c1"># start the session to compute the tensorflow graph</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="c1"># run the initialization</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+        <span class="c1"># do the training loop</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+            <span class="n">epoch_cost</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">num_minibatches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ns</span> <span class="o">/</span> <span class="n">minibatch_size</span><span class="p">)</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">minibatches</span> <span class="o">=</span> <span class="n">random_mini_batches</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">minibatch</span> <span class="ow">in</span> <span class="n">minibatches</span><span class="p">:</span>
+                <span class="c1"># select a minibatch</span>
+                <span class="p">(</span><span class="n">minibatch_X</span><span class="p">,</span> <span class="n">minibatch_Y</span><span class="p">)</span> <span class="o">=</span> <span class="n">minibatch</span>
+                <span class="c1"># run the session to execute the &quot;optimizer&quot; and the &quot;cost&quot;, the feedict contains a minibatch for (X,Y).</span>
+                <span class="n">_</span> <span class="p">,</span> <span class="n">minibatch_cost</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">trainer</span><span class="p">,</span> <span class="n">cost</span><span class="p">],</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">X</span><span class="p">:</span> <span class="n">minibatch_X</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">minibatch_Y</span><span class="p">})</span>
+                <span class="n">epoch_cost</span> <span class="o">+=</span> <span class="n">minibatch_cost</span> <span class="o">/</span> <span class="n">num_minibatches</span>
+            <span class="c1"># print the cost every epoch</span>
+            <span class="k">if</span> <span class="n">print_cost</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Cost after epoch </span><span class="si">%i</span><span class="s2">: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">epoch_cost</span><span class="p">))</span>
+                <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch_cost</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Parameters have been trained!&quot;</span><span class="p">)</span>
+        <span class="c1"># calculate the correct predictions</span>
+        <span class="n">correct_prediction</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Z4</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+        <span class="c1"># calculate accuracy on the test set</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">correct_prediction</span><span class="p">,</span> <span class="s2">&quot;float&quot;</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Train Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">.</span><span class="n">eval</span><span class="p">({</span><span class="n">X</span><span class="p">:</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y</span><span class="p">:</span> <span class="n">Y_train</span><span class="p">}))</span>
+        <span class="k">return</span> <span class="n">parameters</span></div>
+
+
+<div class="viewcode-block" id="ACTINN"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.ACTINN">[docs]</a><span class="k">class</span> <span class="nc">ACTINN</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">n_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">n_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">batch_size</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">type2label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># str: int</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label2type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># int: str</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_types</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># cell type number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Parameters</span>
+
+<div class="viewcode-block" id="ACTINN.fit"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.ACTINN.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+            <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Train model with Neural Network.</span>
+<span class="sd">        :param X: (n_cell, n_gene)</span>
+<span class="sd">        :param y: (n_cell, ), str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_types</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type2label</span> <span class="o">=</span> <span class="n">type_to_label_dict</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label2type</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">type2label</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">convert_type_to_label</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type2label</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">one_hot_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_types</span><span class="p">)</span>
+        <span class="c1"># print(f&quot;Parameters: {self.lr}, {self.num_epochs}, {self.batch_size}&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+                                <span class="n">starting_learning_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span>
+                                <span class="n">num_epochs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_epochs</span><span class="p">,</span>
+                                <span class="n">minibatch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">print_cost</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ACTINN.predict"><a class="viewcode-back" href="../../../../autoapi/tools/evaluation/model/actinn/index.html#tools.evaluation.model.actinn.ACTINN.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;W1&#39;</span><span class="p">,</span> <span class="s1">&#39;b1&#39;</span><span class="p">,</span> <span class="s1">&#39;W2&#39;</span><span class="p">,</span> <span class="s1">&#39;b2&#39;</span><span class="p">,</span> <span class="s1">&#39;W3&#39;</span><span class="p">,</span> <span class="s1">&#39;b3&#39;</span><span class="p">,</span> <span class="s1">&#39;W4&#39;</span><span class="p">,</span> <span class="s1">&#39;b4&#39;</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+        <span class="n">z4</span> <span class="o">=</span> <span class="n">forward_propagation_for_predict</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">z4</span><span class="p">)</span>
+        <span class="n">sess</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">compat</span><span class="o">.</span><span class="n">v1</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">X</span><span class="p">})</span>
+        <span class="n">predicted_label</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">)):</span>
+            <span class="n">predicted_label</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label2type</span><span class="p">[</span><span class="n">prediction</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="n">predicted_label</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+:py:mod:`tools.evaluation`
+==========================
+
+.. py:module:: tools.evaluation
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   model/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   eval/index.rst
+   score/index.rst
+
+

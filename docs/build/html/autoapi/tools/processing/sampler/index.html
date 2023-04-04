@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.processing.sampler &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.sampler</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/tools/processing/sampler/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-tools.processing.sampler">
+<span id="tools-processing-sampler"></span><h1><a class="reference internal" href="#module-tools.processing.sampler" title="tools.processing.sampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.sampler</span></code></a><a class="headerlink" href="#module-tools.processing.sampler" title="Permalink to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tools.processing.sampler.SamplingProcessor" title="tools.processing.sampler.SamplingProcessor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SamplingProcessor</span></code></a></p></td>
+<td><p>Sampling Processing Class.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.sampler.</span></span><span class="sig-name descname"><span class="pre">SamplingProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">settings.random_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor" title="Permalink to this definition"></a></dt>
+<dd><p>Sampling Processing Class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.sampling">
+<span class="sig-name descname"><span class="pre">sampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.sampling" title="Permalink to this definition"></a></dt>
+<dd><p>Sampling function with strategy parameter.
+:param strategy: sampling strategy</p>
+<blockquote>
+<div><p>Sampling Strategy Option:
+<code class="docutils literal notranslate"><span class="pre">stratify</span></code>:</p>
+<blockquote>
+<div><p>Classical stratified sampling</p>
+</div></blockquote>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">balance</span></code>:</dt><dd><p>Stratified sampling with balanced ratio</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">compactness</span></code>:</dt><dd><p>Adjusted sampling with intra-cluster compactness factor</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">complexity</span></code>:</dt><dd><p>Adjusted sampling with inter-cluster complexity factor</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">concave</span></code>:</dt><dd><p>Adjusted sampling with concave integration of compactness factor and complexity factor</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">convex</span></code>:</dt><dd><p>Adjusted sampling with convex integration of compactness factor and complexity factor</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">entropy</span></code>:</dt><dd><p>Adjusted sampling with entropy weight integration of compactness factor and complexity factor</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sampled dataset as AnnData object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.reset_ratio">
+<span class="sig-name descname"><span class="pre">reset_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.reset_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.reset_ratio" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.get_target_dataset">
+<span class="sig-name descname"><span class="pre">get_target_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.get_target_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.get_target_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Get sampled dataset.
+:return: sampled dataset as AnnData object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.generate_factors">
+<span class="sig-name descname"><span class="pre">generate_factors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.generate_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.generate_factors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._check_factor">
+<span class="sig-name descname"><span class="pre">_check_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._check_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._check_factor" title="Permalink to this definition"></a></dt>
+<dd><p>Check the existence of specific factor
+:param factor_type: factor name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._generate_oversampling">
+<span class="sig-name descname"><span class="pre">_generate_oversampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._generate_oversampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._generate_oversampling" title="Permalink to this definition"></a></dt>
+<dd><p>Generate oversampling dataset.
+SMOTE is the most stable oversampling method (Generate fully-balanced dataset)
+Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._stratify">
+<span class="sig-name descname"><span class="pre">_stratify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._stratify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._stratify" title="Permalink to this definition"></a></dt>
+<dd><p>Classical stratified sampling method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._imbalance_sampling">
+<span class="sig-name descname"><span class="pre">_imbalance_sampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._imbalance_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._imbalance_sampling" title="Permalink to this definition"></a></dt>
+<dd><p>Imbalanced sampling operation.
+:param target_ratio: target sampling ratio for each cluster
+:return: sampled dataset as AnnData object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.to_hdf5">
+<span class="sig-name descname"><span class="pre">to_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.to_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.to_hdf5" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
