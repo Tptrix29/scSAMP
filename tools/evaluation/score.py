@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix
 def specific_scores(y: np.array,
                     y_pred: np.array,
                     target: str
-    ) -> tuple:
+                    ) -> tuple:
     """
     Calculate evaluation scores.
     :param y: True value
@@ -48,6 +48,3 @@ def specific_scores(y: np.array,
     return acc, precision, recall, F1, kappa
 
 
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

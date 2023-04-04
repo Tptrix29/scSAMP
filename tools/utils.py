@@ -4,6 +4,7 @@ import time
 
 import numpy as np
 import pandas as pd
+import pyreadr as renv
 from anndata import AnnData
 
 
@@ -28,6 +29,15 @@ class Setting():
 
 settings = Setting()
 
+
+@timer
+def to_rds(
+        data: AnnData,
+        output_file: str,
+        obs_feature: Union[str, list] = "cell_type"
+) -> None:
+    rds: pd.DataFrame = pd.concat([data.to_df(), data.obs[obs_feature]], axis=1)
+    renv.write_rds(output_file, rds)
 
 @timer
 def to_hdf5(

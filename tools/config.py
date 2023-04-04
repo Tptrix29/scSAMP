@@ -40,3 +40,6 @@ class EvaluationStrategy(Enum):
         return len([i for i in self])
 
 
+
+
+

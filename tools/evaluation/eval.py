@@ -71,7 +71,7 @@ class EvaluationProcessor:
                 print(f"{i} / {self.total_iter} ----------------------------------")
                 i += 1
                 sampling = str(sampling)
-                self.sampler.reset_ratio(r)
+                self.sampler._reset_ratio(r)
                 self.train = self.sampler.sampling(strategy=sampling)
                 X_train = self.train.X
                 y_train = self.train.obs[self.pred_col]
