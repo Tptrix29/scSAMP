@@ -35,7 +35,6 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'recommonmark',
-    'sphinx_markdown_tables',
     'sphinx_math_dollar',
 ]
 
