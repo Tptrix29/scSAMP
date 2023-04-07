@@ -42,6 +42,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -74,6 +76,23 @@
 
 
 <div class="viewcode-block" id="SamplingStrategy"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.SamplingStrategy">[docs]</a><span class="k">class</span> <span class="nc">SamplingStrategy</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sample strategy collection.</span>
+
+<span class="sd">    :Options:</span>
+<span class="sd">        - ``stratify``: Classical stratified sampling</span>
+<span class="sd">        - ``balance``: Stratified sampling with balanced ratio</span>
+<span class="sd">        - ``compactness``: Adjusted sampling with intra-cluster compactness factor</span>
+<span class="sd">        - ``complexity``: Adjusted sampling with inter-cluster complexity factor</span>
+<span class="sd">        - ``concave``: Adjusted sampling with concave integration of compactness factor and complexity factor</span>
+<span class="sd">        - ``convex``: Adjusted sampling with convex integration of compactness factor and complexity factor</span>
+<span class="sd">        - ``entropy``: Adjusted sampling with entropy weight integration of compactness factor and complexity factor</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="SamplingStrategy.STRATIFY"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.SamplingStrategy.STRATIFY">[docs]</a>    <span class="n">STRATIFY</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;stratify&quot;</span></div>
 <div class="viewcode-block" id="SamplingStrategy.BALANCE"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.SamplingStrategy.BALANCE">[docs]</a>    <span class="n">BALANCE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;balance&quot;</span></div>
 <div class="viewcode-block" id="SamplingStrategy.COMPACTNESS"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.SamplingStrategy.COMPACTNESS">[docs]</a>    <span class="n">COMPACTNESS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;compactness&quot;</span></div>
@@ -96,6 +115,14 @@
 
 
 <div class="viewcode-block" id="EvaluationStrategy"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.EvaluationStrategy">[docs]</a><span class="k">class</span> <span class="nc">EvaluationStrategy</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluation strategy collection.</span>
+
+<span class="sd">    :Options:</span>
+<span class="sd">        - ``SVM``: Support vector machine model</span>
+<span class="sd">        - ``ACTINN``: Neural network model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="EvaluationStrategy.SVM"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.EvaluationStrategy.SVM">[docs]</a>    <span class="n">SVM</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;svm&quot;</span></div>
 <div class="viewcode-block" id="EvaluationStrategy.ACTINN"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.EvaluationStrategy.ACTINN">[docs]</a>    <span class="n">ACTINN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;actinn&#39;</span></div>
 
@@ -110,6 +137,9 @@
 
 <div class="viewcode-block" id="EvaluationStrategy.__len__"><a class="viewcode-back" href="../../autoapi/tools/config/index.html#tools.config.EvaluationStrategy.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">])</span></div></div>
+
+
+
 
 
 </pre></div>

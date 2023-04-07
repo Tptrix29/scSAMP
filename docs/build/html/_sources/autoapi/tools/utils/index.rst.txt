@@ -22,6 +22,7 @@ Functions
 .. autoapisummary::
 
    tools.utils.timer
+   tools.utils.to_rds
    tools.utils.to_hdf5
    tools.utils._check_obs_key
    tools.utils._check_ratio
@@ -36,9 +37,6 @@ Attributes
    tools.utils.settings
 
 
-.. py:function:: timer(func)
-
-
 .. py:class:: Setting
 
    .. py:method:: reset_seed()
@@ -49,14 +47,22 @@ Attributes
 
    
 
+.. py:function:: timer(func)
+
+
+.. py:function:: to_rds(data: anndata.AnnData, output_file: str, obs_feature: Union[str, list] = 'cell_type') -> None
+
+
 .. py:function:: to_hdf5(source_file: Union[str, list], result_dir: str, type_label: str, source_format: str) -> list
 
-   Convert csv/tab table to h5ad format
-   :param source_file: raw file path
-   :param result_dir: output directory
-   :param type_label: column name
-   :param source_format: raw file type
-   :return: output file location list
+   Convert `csv`/`tab` table to `h5ad` format.
+
+   :param source_file: Raw file path.
+   :param result_dir: Output directory.
+   :param type_label: Column name of cell type label.
+   :param source_format: Source file type, chosen from `csv` or `tab`
+
+   :rtype: Written filepath list.
 
 
 .. py:function:: _check_obs_key(adata: anndata.AnnData, key: str) -> bool

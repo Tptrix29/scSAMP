@@ -8,18 +8,29 @@ def specific_scores(y: np.array,
                     ) -> tuple:
     """
     Calculate evaluation scores.
-    :param y: True value
-    :param y_pred: Prediction
-    :param target: Specific type
-    :return: (accuracy, precision, recall, F1-score, cohen-kappa)
+    Including 'Accuracy', 'Precision', 'Recall', 'F1-score', 'cohen-kappa'.
 
-    Usage:
+    Parameters
+    ----------
+    y
+        Ground truth value in :class:`~numpy.array` format, 1-d array
+    y_pred
+        Predicted value in :class:`~numpy.array` format, 1-d array
+    target
+        Specific clsuter label.
+
+    Returns
+    -------
+        Score tuple of specific cluster.
+
+    Examples
+    --------
     >>> specific_scores(["A", "B", "C", "A", "B"], ["A", "B", "C", "B", "A"], "A")
-    # (0.2, 0.5, 0.5, 0.5, 0.04761904761904763)
+    (0.2, 0.5, 0.5, 0.5, 0.04761904761904763)
     >>> specific_scores(["A", "B", "C", "A", "B"], ["B", "B", "C", "B", "A"], "A")
     (0.0, 0.0, 0.0, 0, 0.08695652173913043)
-
     """
+
     confusion = confusion_matrix(y, y_pred)
 
     clsts = np.unique(np.vstack([y, y_pred]))

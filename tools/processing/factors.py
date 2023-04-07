@@ -27,10 +27,18 @@ def compactness_factor(
     """
     Compactness Factor Calculation
         compactness-factor = 1 - compactness
-    :param info_data: dataframe including cluster info
-    :param numeric_arr: expression matrix
-    :param label: cluster label name
-    :return: (cluster types info, compactness factor array)
+
+    Parameters
+    ----------
+    info_data
+        Metadata as :class:`pandas.DataFrame` with cluster label column.
+    numeric_arr
+        Numeric profile as 2-d :class:`numpy.array`.
+    label
+        Column name of cluster label.
+    Returns
+    -------
+        tuple(cluster label, compactness factor array)
     """
     summary = info_data.groupby(label).apply(
         lambda x: 1 - _compactness(numeric_arr[np.array(x.index.astype(int).tolist()), :])
@@ -46,10 +54,18 @@ def complexity_factor(
     """
     Complexity Factor Calculation:
         complexity-factor = complexity
-    :param info_data: dataframe including cluster info
-    :param numeric_arr: expression matrix
-    :param label: cluster label name
-    :return: (cluster types info, complexity factor array)
+
+    Parameters
+    ----------
+    info_data
+        Metadata as :class:`pandas.DataFrame` with cluster label column.
+    numeric_arr
+        Numeric profile as 2-d :class:`numpy.array`.
+    label
+        Column name of cluster label.
+    Returns
+    -------
+        tuple(cluster label, complexity factor array)
     """
     avg = info_data.groupby(label).apply(
         lambda x: np.mean(numeric_arr[np.array(x.index.astype(int).tolist()), :], axis=0)
@@ -62,32 +78,53 @@ def complexity_factor(
     return summary.index, summary / summary.sum()
 
 
-def concave_2var(vec1: np.array, vec2:np.array) -> np.array:
+def concave_2var(vec1: np.array, vec2: np.array) -> np.array:
     """
-    Concave Integration
-    :param vec1: compactness factor
-    :param vec2: complexity factor
-    :return: concave index
+    Concave integration of 2 factors.
+
+    Parameters
+    ----------
+    vec1
+        Factor vector as 1-d :class:`numpy.array`.
+    vec2
+        Factor vector as 1-d :class:`numpy.array`.
+    Returns
+    -------
+        Integrated factor as 1-d :class:`numpy.array`.
     """
     return (_proto_concave(vec1) + _proto_concave(vec2)) / 2
 
 
 def convex_2var(vec1: np.array, vec2: np.array) -> np.array:
     """
-    Convex Integration
-    :param vec1: compactness factor
-    :param vec2: complexity factor
-    :return: convex index
+    Convex integration of 2 factors.
+
+    Parameters
+    ----------
+    vec1
+        Factor vector as 1-d :class:`numpy.array`.
+    vec2
+        Factor vector as 1-d :class:`numpy.array`.
+    Returns
+    -------
+        Integrated factor as 1-d :class:`numpy.array`.
     """
     return (_proto_convex(vec1) + _proto_convex(vec2)) / 2
 
 
 def entropy_2var(vec1: np.array, vec2: np.array) -> np.array:
     """
-    Entropy Integration
-    :param vec1: compactness factor
-    :param vec2: complexity factor
-    :return: integrated index with entropy weight
+    Integration of 2 factors with entropy weight.
+
+    Parameters
+    ----------
+    vec1
+        Factor vector as 1-d :class:`numpy.array`.
+    vec2
+        Factor vector as 1-d :class:`numpy.array`.
+    Returns
+    -------
+        Integrated factor as 1-d :class:`numpy.array`.
     """
     d1 = 1 - _entropy_1d(vec1)
     d2 = 1 - _entropy_1d(vec2)

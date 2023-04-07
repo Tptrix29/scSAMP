@@ -2,6 +2,23 @@ from enum import Enum
 
 
 class SamplingStrategy(Enum):
+    """
+    Sample strategy collection.
+
+    :Options:
+        - ``stratify``: Classical stratified sampling
+        - ``balance``: Stratified sampling with balanced ratio
+        - ``compactness``: Adjusted sampling with intra-cluster compactness factor
+        - ``complexity``: Adjusted sampling with inter-cluster complexity factor
+        - ``concave``: Adjusted sampling with concave integration of compactness factor and complexity factor
+        - ``convex``: Adjusted sampling with convex integration of compactness factor and complexity factor
+        - ``entropy``: Adjusted sampling with entropy weight integration of compactness factor and complexity factor
+
+    Notes
+    -----
+
+
+    """
     STRATIFY: str = "stratify"
     BALANCE: str = "balance"
     COMPACTNESS: str = "compactness"
@@ -24,6 +41,14 @@ class SamplingStrategy(Enum):
 
 
 class EvaluationStrategy(Enum):
+    """
+    Evaluation strategy collection.
+
+    :Options:
+        - ``SVM``: Support vector machine model
+        - ``ACTINN``: Neural network model
+    """
+
     SVM: str = "svm"
     ACTINN: str = 'actinn'
 

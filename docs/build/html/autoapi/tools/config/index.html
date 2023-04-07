@@ -19,7 +19,9 @@
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="tools.decorator" href="../decorator/index.html" />
+    <link rel="prev" title="tools.processing.sampler" href="../processing/sampler/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,8 +44,22 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../decorator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.decorator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -60,6 +76,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a></li>
       <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.config</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/tools/config/index.rst.txt" rel="nofollow"> View page source</a>
@@ -79,10 +97,10 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#tools.config.SamplingStrategy" title="tools.config.SamplingStrategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SamplingStrategy</span></code></a></p></td>
-<td><p>Generic enumeration.</p></td>
+<td><p>Sample strategy collection.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#tools.config.EvaluationStrategy" title="tools.config.EvaluationStrategy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EvaluationStrategy</span></code></a></p></td>
-<td><p>Generic enumeration.</p></td>
+<td><p>Evaluation strategy collection.</p></td>
 </tr>
 </tbody>
 </table>
@@ -90,8 +108,21 @@
 <dt class="sig sig-object py" id="tools.config.SamplingStrategy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.config.</span></span><span class="sig-name descname"><span class="pre">SamplingStrategy</span></span><a class="reference internal" href="../../../_modules/tools/config.html#SamplingStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.config.SamplingStrategy" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Generic enumeration.</p>
-<p>Derive from this class to define new enumerations.</p>
+<p>Sample strategy collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">stratify</span></code>: Classical stratified sampling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">balance</span></code>: Stratified sampling with balanced ratio</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">compactness</span></code>: Adjusted sampling with intra-cluster compactness factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">complexity</span></code>: Adjusted sampling with inter-cluster complexity factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">concave</span></code>: Adjusted sampling with concave integration of compactness factor and complexity factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">convex</span></code>: Adjusted sampling with convex integration of compactness factor and complexity factor</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">entropy</span></code>: Adjusted sampling with entropy weight integration of compactness factor and complexity factor</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="tools.config.SamplingStrategy.STRATIFY">
 <span class="sig-name descname"><span class="pre">STRATIFY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'stratify'</span></em><a class="reference internal" href="../../../_modules/tools/config.html#SamplingStrategy.STRATIFY"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.config.SamplingStrategy.STRATIFY" title="Permalink to this definition"></a></dt>
@@ -155,8 +186,15 @@
 <dt class="sig sig-object py" id="tools.config.EvaluationStrategy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.config.</span></span><span class="sig-name descname"><span class="pre">EvaluationStrategy</span></span><a class="reference internal" href="../../../_modules/tools/config.html#EvaluationStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.config.EvaluationStrategy" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>Generic enumeration.</p>
-<p>Derive from this class to define new enumerations.</p>
+<p>Evaluation strategy collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SVM</span></code>: Support vector machine model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ACTINN</span></code>: Neural network model</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="tools.config.EvaluationStrategy.SVM">
 <span class="sig-name descname"><span class="pre">SVM</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'svm'</span></em><a class="reference internal" href="../../../_modules/tools/config.html#EvaluationStrategy.SVM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.config.EvaluationStrategy.SVM" title="Permalink to this definition"></a></dt>
@@ -198,7 +236,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../processing/sampler/index.html" class="btn btn-neutral float-left" title="tools.processing.sampler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../decorator/index.html" class="btn btn-neutral float-right" title="tools.decorator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

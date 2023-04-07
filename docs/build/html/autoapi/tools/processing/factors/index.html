@@ -19,7 +19,9 @@
         <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="tools.processing.preprocessing" href="../preprocessing/index.html" />
+    <link rel="prev" title="tools.processing.balance" href="../balance/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,8 +44,21 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../evaluation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.evaluation</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -60,6 +75,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing</span></code></a></li>
       <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.factors</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/tools/processing/factors/index.rst.txt" rel="nofollow"> View page source</a>
@@ -97,13 +115,13 @@
 <td><p>Complexity Factor Calculation:</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#tools.processing.factors.concave_2var" title="tools.processing.factors.concave_2var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">concave_2var</span></code></a>(→ numpy.array)</p></td>
-<td><p>Concave Integration</p></td>
+<td><p>Concave integration of 2 factors.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#tools.processing.factors.convex_2var" title="tools.processing.factors.convex_2var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convex_2var</span></code></a>(→ numpy.array)</p></td>
-<td><p>Convex Integration</p></td>
+<td><p>Convex integration of 2 factors.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#tools.processing.factors.entropy_2var" title="tools.processing.factors.entropy_2var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_2var</span></code></a>(→ numpy.array)</p></td>
-<td><p>Entropy Integration</p></td>
+<td><p>Integration of 2 factors with entropy weight.</p></td>
 </tr>
 </tbody>
 </table>
@@ -137,13 +155,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>info_data</strong> – dataframe including cluster info</p></li>
-<li><p><strong>numeric_arr</strong> – expression matrix</p></li>
-<li><p><strong>label</strong> – cluster label name</p></li>
+<li><p><strong>info_data</strong> – Metadata as <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> with cluster label column.</p></li>
+<li><p><strong>numeric_arr</strong> – Numeric profile as 2-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+<li><p><strong>label</strong> – Column name of cluster label.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(cluster types info, compactness factor array)</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(cluster label, compactness factor array)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -158,13 +176,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>info_data</strong> – dataframe including cluster info</p></li>
-<li><p><strong>numeric_arr</strong> – expression matrix</p></li>
-<li><p><strong>label</strong> – cluster label name</p></li>
+<li><p><strong>info_data</strong> – Metadata as <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> with cluster label column.</p></li>
+<li><p><strong>numeric_arr</strong> – Numeric profile as 2-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+<li><p><strong>label</strong> – Column name of cluster label.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(cluster types info, complexity factor array)</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(cluster label, complexity factor array)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,28 +190,52 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.factors.concave_2var">
 <span class="sig-prename descclassname"><span class="pre">tools.processing.factors.</span></span><span class="sig-name descname"><span class="pre">concave_2var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/factors.html#concave_2var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.factors.concave_2var" title="Permalink to this definition"></a></dt>
-<dd><p>Concave Integration
-:param vec1: compactness factor
-:param vec2: complexity factor
-:return: concave index</p>
+<dd><p>Concave integration of 2 factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec1</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+<li><p><strong>vec2</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Integrated factor as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.factors.convex_2var">
 <span class="sig-prename descclassname"><span class="pre">tools.processing.factors.</span></span><span class="sig-name descname"><span class="pre">convex_2var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/factors.html#convex_2var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.factors.convex_2var" title="Permalink to this definition"></a></dt>
-<dd><p>Convex Integration
-:param vec1: compactness factor
-:param vec2: complexity factor
-:return: convex index</p>
+<dd><p>Convex integration of 2 factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec1</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+<li><p><strong>vec2</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Integrated factor as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.processing.factors.entropy_2var">
 <span class="sig-prename descclassname"><span class="pre">tools.processing.factors.</span></span><span class="sig-name descname"><span class="pre">entropy_2var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.array</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/factors.html#entropy_2var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.factors.entropy_2var" title="Permalink to this definition"></a></dt>
-<dd><p>Entropy Integration
-:param vec1: compactness factor
-:param vec2: complexity factor
-:return: integrated index with entropy weight</p>
+<dd><p>Integration of 2 factors with entropy weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec1</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+<li><p><strong>vec2</strong> – Factor vector as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Integrated factor as 1-d <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -203,7 +245,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../balance/index.html" class="btn btn-neutral float-left" title="tools.processing.balance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../preprocessing/index.html" class="btn btn-neutral float-right" title="tools.processing.preprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

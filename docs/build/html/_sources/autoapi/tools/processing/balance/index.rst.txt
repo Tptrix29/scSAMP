@@ -21,23 +21,30 @@ Functions
 
 .. py:function:: balance_power(x: numpy.array, a: float = 3) -> numpy.array
 
-   Balance function in power format. (Symmetric)
-   :param x: 1-d array
-   :param a: scale factor
-   :return: 1-d array
+   Balance function in poly-nominal format. (Symmetric)
+   math:: f(x) = ax^3
+
+   :param x: Input 1-d array in :class:`~numpy.array` format.
+   :param a: Scale factor. Default: 3
+
+   :rtype: Balanced 1-d array.
 
 
 .. py:function:: balance_inv_sigmoid(x: numpy.array) -> numpy.array
 
    Balance function in inverse sigmoid format. (Asymmetric)
-   :param x: 1-d array
-   :return: 1-d array
+
+   :param x: Input 1-d array in :class:`~numpy.array` format.
+
+   :rtype: Balanced 1-d array.
 
 
 .. py:function:: balance_tan(x: numpy.array) -> numpy.array
 
-   Balance function in tangent format. (Symmetric)
-   :param x: 1-d array
-   :return: 1-d array
+   Balance function in tangent format. (Asymmetric)
+
+   :param x: Input 1-d array in :class:`~numpy.array` format.
+
+   :rtype: Balanced 1-d array.
 
 

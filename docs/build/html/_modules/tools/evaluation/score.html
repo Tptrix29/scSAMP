@@ -42,6 +42,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -78,20 +80,31 @@
                     <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                     <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
                     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate evaluation scores.</span>
-<span class="sd">    :param y: True value</span>
-<span class="sd">    :param y_pred: Prediction</span>
-<span class="sd">    :param target: Specific type</span>
-<span class="sd">    :return: (accuracy, precision, recall, F1-score, cohen-kappa)</span>
+<span class="sd">    Including &#39;Accuracy&#39;, &#39;Precision&#39;, &#39;Recall&#39;, &#39;F1-score&#39;, &#39;cohen-kappa&#39;.</span>
 
-<span class="sd">    Usage:</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y</span>
+<span class="sd">        Ground truth value in :class:`~numpy.array` format, 1-d array</span>
+<span class="sd">    y_pred</span>
+<span class="sd">        Predicted value in :class:`~numpy.array` format, 1-d array</span>
+<span class="sd">    target</span>
+<span class="sd">        Specific clsuter label.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Score tuple of specific cluster.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; specific_scores([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;B&quot;], [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;A&quot;], &quot;A&quot;)</span>
-<span class="sd">    # (0.2, 0.5, 0.5, 0.5, 0.04761904761904763)</span>
+<span class="sd">    (0.2, 0.5, 0.5, 0.5, 0.04761904761904763)</span>
 <span class="sd">    &gt;&gt;&gt; specific_scores([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;B&quot;], [&quot;B&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;A&quot;], &quot;A&quot;)</span>
 <span class="sd">    (0.0, 0.0, 0.0, 0, 0.08695652173913043)</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
 
     <span class="n">clsts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">]))</span>
@@ -120,9 +133,6 @@
     <span class="k">return</span> <span class="n">acc</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">,</span> <span class="n">F1</span><span class="p">,</span> <span class="n">kappa</span></div>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">doctest</span>
-    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
            </div>

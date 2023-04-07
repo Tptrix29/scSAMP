@@ -7,17 +7,6 @@ import pandas as pd
 import pyreadr as renv
 from anndata import AnnData
 
-
-def timer(func):
-    def wrapper(*args, **kwargs):
-        st = time.time()
-        func(*args, **kwargs)
-        end = time.time()
-        print(f"Time consumption of running '{func.__name__}': {end - st}")
-
-    return wrapper
-
-
 class Setting():
     def __init__(self):
         self.random_state: int = 0
@@ -30,6 +19,15 @@ class Setting():
 settings = Setting()
 
 
+def timer(func):
+    def wrapper(*args, **kwargs):
+        st = time.time()
+        func(*args, **kwargs)
+        end = time.time()
+        print(f"Time consumption of running '{func.__name__}': {end - st}")
+    return wrapper
+
+
 @timer
 def to_rds(
         data: AnnData,
@@ -39,6 +37,7 @@ def to_rds(
     rds: pd.DataFrame = pd.concat([data.to_df(), data.obs[obs_feature]], axis=1)
     renv.write_rds(output_file, rds)
 
+
 @timer
 def to_hdf5(
         source_file: Union[str, list],
@@ -47,13 +46,23 @@ def to_hdf5(
         source_format: str,
 ) -> list:
     """
-    Convert csv/tab table to h5ad format
-    :param source_file: raw file path
-    :param result_dir: output directory
-    :param type_label: column name
-    :param source_format: raw file type
-    :return: output file location list
+    Convert `csv`/`tab` table to `h5ad` format.
+
+    Parameters
+    ----------
+    source_file
+        Raw file path.
+    result_dir
+        Output directory.
+    type_label
+        Column name of cell type label.
+    source_format
+        Source file type, chosen from `csv` or `tab`
+    Returns
+    -------
+        Written filepath list.
     """
+
     result_dir = result_dir if result_dir[-1] == '/' else result_dir + '/'
     results_file = []
 
@@ -93,5 +102,5 @@ def _check_obs_key(
 
 def _check_ratio(ratio: float) -> bool:
     if ratio <= 0 or ratio > 1:
-        raise ValueError("Invalid ratio: ration range should be (0, 1).")
+        raise ValueError("Invalid ratio: ration range should be [0, 1).")
     return True

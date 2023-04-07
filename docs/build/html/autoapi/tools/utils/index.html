@@ -19,7 +19,8 @@
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="tools.decorator" href="../decorator/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,8 +43,22 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../decorator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.decorator</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -60,6 +75,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a></li>
       <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.utils</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../_sources/autoapi/tools/utils/index.rst.txt" rel="nofollow"> View page source</a>
@@ -91,13 +108,16 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#tools.utils.timer" title="tools.utils.timer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">timer</span></code></a>(func)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tools.utils.to_hdf5" title="tools.utils.to_hdf5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hdf5</span></code></a>(→ list)</p></td>
-<td><p>Convert csv/tab table to h5ad format</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tools.utils._check_obs_key" title="tools.utils._check_obs_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_obs_key</span></code></a>(→ bool)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tools.utils.to_rds" title="tools.utils.to_rds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_rds</span></code></a>(→ None)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tools.utils._check_ratio" title="tools.utils._check_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_ratio</span></code></a>(→ bool)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tools.utils.to_hdf5" title="tools.utils.to_hdf5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hdf5</span></code></a>(→ list)</p></td>
+<td><p>Convert <cite>csv</cite>/<cite>tab</cite> table to <cite>h5ad</cite> format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tools.utils._check_obs_key" title="tools.utils._check_obs_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_obs_key</span></code></a>(→ bool)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tools.utils._check_ratio" title="tools.utils._check_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_ratio</span></code></a>(→ bool)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -112,11 +132,6 @@
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="tools.utils.timer">
-<span class="sig-prename descclassname"><span class="pre">tools.utils.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/tools/utils.html#timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.utils.timer" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="tools.utils.Setting">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.utils.</span></span><span class="sig-name descname"><span class="pre">Setting</span></span><a class="reference internal" href="../../../_modules/tools/utils.html#Setting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.utils.Setting" title="Permalink to this definition"></a></dt>
@@ -133,14 +148,32 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tools.utils.timer">
+<span class="sig-prename descclassname"><span class="pre">tools.utils.</span></span><span class="sig-name descname"><span class="pre">timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/tools/utils.html#timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.utils.timer" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.utils.to_rds">
+<span class="sig-prename descclassname"><span class="pre">tools.utils.</span></span><span class="sig-name descname"><span class="pre">to_rds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cell_type'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/tools/utils.html#to_rds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.utils.to_rds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tools.utils.to_hdf5">
 <span class="sig-prename descclassname"><span class="pre">tools.utils.</span></span><span class="sig-name descname"><span class="pre">to_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../../_modules/tools/utils.html#to_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.utils.to_hdf5" title="Permalink to this definition"></a></dt>
-<dd><p>Convert csv/tab table to h5ad format
-:param source_file: raw file path
-:param result_dir: output directory
-:param type_label: column name
-:param source_format: raw file type
-:return: output file location list</p>
+<dd><p>Convert <cite>csv</cite>/<cite>tab</cite> table to <cite>h5ad</cite> format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_file</strong> – Raw file path.</p></li>
+<li><p><strong>result_dir</strong> – Output directory.</p></li>
+<li><p><strong>type_label</strong> – Column name of cell type label.</p></li>
+<li><p><strong>source_format</strong> – Source file type, chosen from <cite>csv</cite> or <cite>tab</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Written filepath list.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -160,7 +193,9 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../decorator/index.html" class="btn btn-neutral float-left" title="tools.decorator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

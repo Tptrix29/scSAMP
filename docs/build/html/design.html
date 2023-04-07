@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design &mdash; scDesign v0.1.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}})</script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]]}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="autoapi/index.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            scDesign
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sampling-strategy">Sampling Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#balance-processing">Balance Processing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#factor-calculation">Factor Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#factor-integration">Factor Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oversampling">Oversampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sampling-size">Sampling Size</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#recommended-size-calculation">Recommended Size Calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#strategy-choice">Strategy Choice</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scDesign</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Design</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/design.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="toctree-wrapper compound">
+</div>
+<section id="design">
+<h1>Design<a class="headerlink" href="#design" title="Permalink to this heading"></a></h1>
+<p>Method design document.</p>
+<section id="pipeline">
+<h2>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Preprocessing</p></li>
+<li><p>Sampling</p></li>
+<li><p>Model Training</p></li>
+<li><p>Evaluation</p></li>
+</ol>
+</section>
+<section id="sampling-strategy">
+<h2>Sampling Strategy<a class="headerlink" href="#sampling-strategy" title="Permalink to this heading"></a></h2>
+<p>7 strategies in toolkit.</p>
+<ol class="arabic simple">
+<li><p>Classical stratified sampling (Statistical)</p></li>
+<li><p>Balanced stratified sampling (Statistical)</p></li>
+<li><p>Stratified sampling with compactness factor (Bio)</p></li>
+<li><p>Stratified sampling with complexity factor (Bio)</p></li>
+<li><p>Stratified sampling with concave factor (Integrated)</p></li>
+<li><p>Stratified sampling with convex factor (Integrated)</p></li>
+<li><p>Stratified sampling with entropy-weighted factor (Integrated)</p></li>
+</ol>
+<section id="balance-processing">
+<h3>Balance Processing<a class="headerlink" href="#balance-processing" title="Permalink to this heading"></a></h3>
+<dl class="field-list">
+<dt class="field-odd">Purpose<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Avoid the sampling ration which is extremely large or small.</p>
+<p>Assure the stability of method.</p>
+</dd>
+</dl>
+<p>There are <span class="math notranslate nohighlight">\(M\)</span> clusters in dataset, each cluster’s size ratio is <span class="math notranslate nohighlight">\(p_l,l=1, ..., M\)</span>.
+Balance processing aimed at balancing <span class="math notranslate nohighlight">\(p_l\)</span>, the processing formula is:</p>
+<p><div class="math notranslate nohighlight">
+\[
+p_l^*=\frac{f_b(p_l)}{\sum_{l=1}^{M}{f_b(p_l)}}
+\]</div>
+
+<span class="math notranslate nohighlight">\(f_b\)</span> is balance function.</p>
+<p>Given our purpose, this processing need to scale up the small ratio and scale down the large ratio.
+So the balance function should satisfy these constrains:</p>
+<ul class="simple">
+<li><p>monotonically increasing in range (0, 1)</p></li>
+<li><p>symmetrical to point <span class="math notranslate nohighlight">\((\frac{1}{2}, \frac{1}{2})\)</span></p></li>
+</ul>
+<p>Function choices：</p>
+<p>1. Poly-nominal
+<div class="math notranslate nohighlight">
+\[
+f_b(x) = (x-0.5)(ax^2-ax+1)+0.5, a\in(0, 4]
+\]</div>
+
+<span class="math notranslate nohighlight">\(a\)</span> is scale factor for balance curve, default value is 3.</p>
+<p>Curve pattern:</p>
+<ol class="arabic simple" start="2">
+<li><p>Inverse sigmoid</p></li>
+<li><p>Inverse tanh</p></li>
+</ol>
+</section>
+<section id="factor-calculation">
+<h3>Factor Calculation<a class="headerlink" href="#factor-calculation" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Compactness factor</p></li>
+</ol>
+<p>Intra-cluster compactness: for each cluster</p>
+<p><div class="math notranslate nohighlight">
+\[
+Compactness_i = \frac{1}{m_i}\sum^{m_i}_{j=1}||person\_corr(avg_i, value_{ij})||, \in(0, 1)
+\]</div>
+
+<div class="math notranslate nohighlight">
+\[
+CompactnessFactor_i = 1 - Compactness_i
+\]</div>
+</p>
+<ol class="arabic simple" start="2">
+<li><p>Complexity factor</p></li>
+</ol>
+<p>Inter-cluster complexity: for each cluster</p>
+<p><div class="math notranslate nohighlight">
+\[
+Complexity_i = \sum^{n}_{j=1}MAX(person\_corr(avg_i, avg_j))
+\]</div>
+
+<div class="math notranslate nohighlight">
+\[
+ComplexityFactor_i = Complexity_i
+\]</div>
+</p>
+</section>
+<section id="factor-integration">
+<h3>Factor Integration<a class="headerlink" href="#factor-integration" title="Permalink to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Purpose<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Find function <span class="math notranslate nohighlight">\(f\)</span> to integrate compactness factor and complexity factor.</p>
+</dd>
+</dl>
+<ol class="arabic simple">
+<li><p>Concave</p></li>
+<li><p>Convex</p></li>
+<li><p>Entropy weight</p></li>
+</ol>
+<p>The factor with large entropy indicates small information and small weight.</p>
+<p>For a scaled matrix <span class="math notranslate nohighlight">\(C_{n\times m}\)</span>:
+Calculate entropy value:
+<div class="math notranslate nohighlight">
+\[
+e_j = -\frac{1}{ln(n)}\sum_{i=1}^n c_{ij} * ln(c_{ij})~~~j=1, 2, ..., m
+\]</div>
+</p>
+<p>Differential coefficient:
+<div class="math notranslate nohighlight">
+\[
+d_j = 1-e_j
+\]</div>
+</p>
+<p>Weight：
+<div class="math notranslate nohighlight">
+\[
+w_i = \frac{d_j}{\sum d_j}
+\]</div>
+</p>
+</section>
+<section id="oversampling">
+<h3>Oversampling<a class="headerlink" href="#oversampling" title="Permalink to this heading"></a></h3>
+<dl class="field-list simple">
+<dt class="field-odd">Purpose<span class="colon">:</span></dt>
+<dd class="field-odd"><p>To deal with the issue that some cluster’s size is not sufficient for expected sampling size, package applied <strong>oversampling</strong> method to generate auxiliary sample.
+The default oversampling method is <strong>SMOTE</strong>.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="sampling-size">
+<h2>Sampling Size<a class="headerlink" href="#sampling-size" title="Permalink to this heading"></a></h2>
+<p>Users could use customized sampling size or automatically-calculated recommended size to generate sampled dataset.</p>
+<section id="recommended-size-calculation">
+<h3>Recommended Size Calculation<a class="headerlink" href="#recommended-size-calculation" title="Permalink to this heading"></a></h3>
+<p>Define a state of sampled dataset:
+If we apply resampling/random sampling with replacement to shrunk dataset in <em>k</em> times, we will consider this dataset is <strong>‘reliable’</strong> enough as long as there are <em>r</em> cells from minimum cell type with <em>c</em> confidence.</p>
+<dl class="field-list">
+<dt class="field-odd">Conditions<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>p</em>, relative abundance, equals to balanced factor</p>
+<p><em>r</em>, success count, customized parameter</p>
+<p><em>k</em>, size of shrunk dataset</p>
+<p><em>c</em>, confidence, customized parameter, default 99%</p>
+</dd>
+</dl>
+<p>In this scenario, sampling size conform to NB(Negative Binomial) distribution.</p>
+<p><strong>Negative Binomial Distribution</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>When applying independent binomial trails (success probability is <span class="math notranslate nohighlight">\(p\)</span>) and succeed <span class="math notranslate nohighlight">\(r\)</span> times, the total trail count is <span class="math notranslate nohighlight">\(X\)</span>.</p>
+</dd>
+</dl>
+<p><div class="math notranslate nohighlight">
+\[
+X \sim NB(r, p)
+\]</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Possibility mass function, pmf<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p><div class="math notranslate nohighlight">
+\[
+f(k;r, p) = P(X=k) = \binom {k-1}{r-1}p^r(1-p)^{k-r}~~~k=r, r+1,...
+\]</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Cumulative distribution function, cdf<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p><div class="math notranslate nohighlight">
+\[
+F(k; r, p) = P(X\leq k) = \sum_{i=r}^{k} P(X=i)
+\]</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Expectation &amp; Variance<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<p><div class="math notranslate nohighlight">
+\[
+E(X) = \frac{r}{p} ~~~~~ Var(X) = \frac{r}{p^2}
+\]</div>
+</p>
+</section>
+<section id="strategy-choice">
+<h3>Strategy Choice<a class="headerlink" href="#strategy-choice" title="Permalink to this heading"></a></h3>
+<p>Extreme condition:</p>
+<ul class="simple">
+<li><p>Least: 1 cell from minimum cell type, default value</p></li>
+<li><p>Most: sampled dataset size = raw dataset size</p></li>
+</ul>
+<p>Check threshold:
+When target dataset size &gt;= 0.5 * total, degenerated to balanced stratified sampling</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="autoapi/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Tptrix29.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

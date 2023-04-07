@@ -42,6 +42,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -77,12 +79,22 @@
         <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">a</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Balance function in power format. (Symmetric)</span>
-<span class="sd">    :param x: 1-d array</span>
-<span class="sd">    :param a: scale factor</span>
-<span class="sd">    :return: 1-d array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Balance function in poly-nominal format. (Symmetric)</span>
+<span class="sd">    math:: f(x) = ax^3</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x</span>
+<span class="sd">        Input 1-d array in :class:`~numpy.array` format.</span>
+<span class="sd">    a</span>
+<span class="sd">        Scale factor. Default: 3</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Balanced 1-d array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
     <span class="k">return</span> <span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
@@ -90,11 +102,19 @@
 <div class="viewcode-block" id="balance_inv_sigmoid"><a class="viewcode-back" href="../../../autoapi/tools/processing/balance/index.html#tools.processing.balance.balance_inv_sigmoid">[docs]</a><span class="k">def</span> <span class="nf">balance_inv_sigmoid</span><span class="p">(</span>
         <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Balance function in inverse sigmoid format. (Asymmetric)</span>
-<span class="sd">    :param x: 1-d array</span>
-<span class="sd">    :return: 1-d array</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x</span>
+<span class="sd">        Input 1-d array in :class:`~numpy.array` format.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Balanced 1-d array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mf">0.5</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
@@ -103,11 +123,19 @@
 <div class="viewcode-block" id="balance_tan"><a class="viewcode-back" href="../../../autoapi/tools/processing/balance/index.html#tools.processing.balance.balance_tan">[docs]</a><span class="k">def</span> <span class="nf">balance_tan</span><span class="p">(</span>
         <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Balance function in tangent format. (Symmetric)</span>
-<span class="sd">    :param x: 1-d array</span>
-<span class="sd">    :return: 1-d array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Balance function in tangent format. (Asymmetric)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x</span>
+<span class="sd">        Input 1-d array in :class:`~numpy.array` format.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Balanced 1-d array.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.5</span><span class="p">))</span> <span class="o">+</span> <span class="mf">0.5</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>

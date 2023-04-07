@@ -42,6 +42,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -76,18 +78,8 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pyreadr</span> <span class="k">as</span> <span class="nn">renv</span>
 <span class="kn">from</span> <span class="nn">anndata</span> <span class="kn">import</span> <span class="n">AnnData</span>
-
-
-<div class="viewcode-block" id="timer"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.timer">[docs]</a><span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">st</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time consumption of running &#39;</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">end</span> <span class="o">-</span> <span class="n">st</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">wrapper</span></div>
-
 
 <div class="viewcode-block" id="Setting"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.Setting">[docs]</a><span class="k">class</span> <span class="nc">Setting</span><span class="p">():</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -101,6 +93,25 @@
 <div class="viewcode-block" id="settings"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.settings">[docs]</a><span class="n">settings</span> <span class="o">=</span> <span class="n">Setting</span><span class="p">()</span></div>
 
 
+<div class="viewcode-block" id="timer"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.timer">[docs]</a><span class="k">def</span> <span class="nf">timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time consumption of running &#39;</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">st</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+<span class="nd">@timer</span>
+<div class="viewcode-block" id="to_rds"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.to_rds">[docs]</a><span class="k">def</span> <span class="nf">to_rds</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+        <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">obs_feature</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cell_type&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">rds</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">to_df</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">obs</span><span class="p">[</span><span class="n">obs_feature</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">renv</span><span class="o">.</span><span class="n">write_rds</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">rds</span><span class="p">)</span></div>
+
+
 <span class="nd">@timer</span>
 <div class="viewcode-block" id="to_hdf5"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils.to_hdf5">[docs]</a><span class="k">def</span> <span class="nf">to_hdf5</span><span class="p">(</span>
         <span class="n">source_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
@@ -108,14 +119,24 @@
         <span class="n">type_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">source_format</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert csv/tab table to h5ad format</span>
-<span class="sd">    :param source_file: raw file path</span>
-<span class="sd">    :param result_dir: output directory</span>
-<span class="sd">    :param type_label: column name</span>
-<span class="sd">    :param source_format: raw file type</span>
-<span class="sd">    :return: output file location list</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert `csv`/`tab` table to `h5ad` format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    source_file</span>
+<span class="sd">        Raw file path.</span>
+<span class="sd">    result_dir</span>
+<span class="sd">        Output directory.</span>
+<span class="sd">    type_label</span>
+<span class="sd">        Column name of cell type label.</span>
+<span class="sd">    source_format</span>
+<span class="sd">        Source file type, chosen from `csv` or `tab`</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Written filepath list.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">result_dir</span> <span class="o">=</span> <span class="n">result_dir</span> <span class="k">if</span> <span class="n">result_dir</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;/&#39;</span> <span class="k">else</span> <span class="n">result_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
     <span class="n">results_file</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -155,7 +176,7 @@
 
 <div class="viewcode-block" id="_check_ratio"><a class="viewcode-back" href="../../autoapi/tools/utils/index.html#tools.utils._check_ratio">[docs]</a><span class="k">def</span> <span class="nf">_check_ratio</span><span class="p">(</span><span class="n">ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">ratio</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ratio</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid ratio: ration range should be (0, 1).&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid ratio: ration range should be [0, 1).&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">True</span></div>
 </pre></div>
 

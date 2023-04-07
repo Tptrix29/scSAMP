@@ -41,43 +41,53 @@ Functions
 
    Compactness Factor Calculation
        compactness-factor = 1 - compactness
-   :param info_data: dataframe including cluster info
-   :param numeric_arr: expression matrix
-   :param label: cluster label name
-   :return: (cluster types info, compactness factor array)
+
+   :param info_data: Metadata as :class:`pandas.DataFrame` with cluster label column.
+   :param numeric_arr: Numeric profile as 2-d :class:`numpy.array`.
+   :param label: Column name of cluster label.
+
+   :rtype: tuple(cluster label, compactness factor array)
 
 
 .. py:function:: complexity_factor(info_data: pandas.DataFrame, numeric_arr: numpy.array, label: str) -> (pandas.Index, numpy.array)
 
    Complexity Factor Calculation:
        complexity-factor = complexity
-   :param info_data: dataframe including cluster info
-   :param numeric_arr: expression matrix
-   :param label: cluster label name
-   :return: (cluster types info, complexity factor array)
+
+   :param info_data: Metadata as :class:`pandas.DataFrame` with cluster label column.
+   :param numeric_arr: Numeric profile as 2-d :class:`numpy.array`.
+   :param label: Column name of cluster label.
+
+   :rtype: tuple(cluster label, complexity factor array)
 
 
 .. py:function:: concave_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
 
-   Concave Integration
-   :param vec1: compactness factor
-   :param vec2: complexity factor
-   :return: concave index
+   Concave integration of 2 factors.
+
+   :param vec1: Factor vector as 1-d :class:`numpy.array`.
+   :param vec2: Factor vector as 1-d :class:`numpy.array`.
+
+   :rtype: Integrated factor as 1-d :class:`numpy.array`.
 
 
 .. py:function:: convex_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
 
-   Convex Integration
-   :param vec1: compactness factor
-   :param vec2: complexity factor
-   :return: convex index
+   Convex integration of 2 factors.
+
+   :param vec1: Factor vector as 1-d :class:`numpy.array`.
+   :param vec2: Factor vector as 1-d :class:`numpy.array`.
+
+   :rtype: Integrated factor as 1-d :class:`numpy.array`.
 
 
 .. py:function:: entropy_2var(vec1: numpy.array, vec2: numpy.array) -> numpy.array
 
-   Entropy Integration
-   :param vec1: compactness factor
-   :param vec2: complexity factor
-   :return: integrated index with entropy weight
+   Integration of 2 factors with entropy weight.
+
+   :param vec1: Factor vector as 1-d :class:`numpy.array`.
+   :param vec2: Factor vector as 1-d :class:`numpy.array`.
+
+   :rtype: Integrated factor as 1-d :class:`numpy.array`.
 
 

@@ -22,9 +22,18 @@ Classes
 
    Bases: :py:obj:`enum.Enum`
 
-   Generic enumeration.
+   Sample strategy collection.
 
-   Derive from this class to define new enumerations.
+   :Options:
+       - ``stratify``: Classical stratified sampling
+       - ``balance``: Stratified sampling with balanced ratio
+       - ``compactness``: Adjusted sampling with intra-cluster compactness factor
+       - ``complexity``: Adjusted sampling with inter-cluster complexity factor
+       - ``concave``: Adjusted sampling with concave integration of compactness factor and complexity factor
+       - ``convex``: Adjusted sampling with convex integration of compactness factor and complexity factor
+       - ``entropy``: Adjusted sampling with entropy weight integration of compactness factor and complexity factor
+
+   .. rubric:: Notes
 
    .. py:attribute:: STRATIFY
       :type: str
@@ -89,9 +98,11 @@ Classes
 
    Bases: :py:obj:`enum.Enum`
 
-   Generic enumeration.
+   Evaluation strategy collection.
 
-   Derive from this class to define new enumerations.
+   :Options:
+       - ``SVM``: Support vector machine model
+       - ``ACTINN``: Neural network model
 
    .. py:attribute:: SVM
       :type: str

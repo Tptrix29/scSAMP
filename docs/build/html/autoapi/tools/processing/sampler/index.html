@@ -19,7 +19,9 @@
         <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="tools.config" href="../../config/index.html" />
+    <link rel="prev" title="tools.processing.preprocessing" href="../preprocessing/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,8 +44,21 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../evaluation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.evaluation</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -60,6 +75,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing</span></code></a></li>
       <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools.processing.sampler</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/autoapi/tools/processing/sampler/index.rst.txt" rel="nofollow"> View page source</a>
@@ -85,71 +103,152 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.sampler.</span></span><span class="sig-name descname"><span class="pre">SamplingProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">settings.random_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.processing.sampler.</span></span><span class="sig-name descname"><span class="pre">SamplingProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">anndata.AnnData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">settings.random_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor" title="Permalink to this definition"></a></dt>
 <dd><p>Sampling Processing Class.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.reference">
+<span class="sig-name descname"><span class="pre">reference</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.reference" title="Permalink to this definition"></a></dt>
+<dd><p>References dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">anndata.AnnData</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.sampling_ratio">
+<span class="sig-name descname"><span class="pre">sampling_ratio</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.sampling_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Temporary sampling ratio, range in [0, 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float, default=None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.cluster_label">
+<span class="sig-name descname"><span class="pre">cluster_label</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.cluster_label" title="Permalink to this definition"></a></dt>
+<dd><p>Column name of cell type label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.raw_count">
+<span class="sig-name descname"><span class="pre">raw_count</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.raw_count" title="Permalink to this definition"></a></dt>
+<dd><p>Cell count of raw dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.latest_label">
+<span class="sig-name descname"><span class="pre">latest_label</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.latest_label" title="Permalink to this definition"></a></dt>
+<dd><p>Sampling selection label of specific method and ratio (latest applied).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.oversampling_dataset">
+<span class="sig-name descname"><span class="pre">oversampling_dataset</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.oversampling_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Oversampling dataset, generated by <code class="xref py py-class docutils literal notranslate"><span class="pre">imblearn.over_sampling.SMOTE</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">anndata.AnnData</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.metadata">
+<span class="sig-name descname"><span class="pre">metadata</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Metadata of cluster-specific factors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.random_state">
+<span class="sig-name descname"><span class="pre">random_state</span></span><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.random_state" title="Permalink to this definition"></a></dt>
+<dd><p>Random state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This is a beta version.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">scanpy</span> <span class="k">as</span> <span class="nn">sc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="s2">&quot;path/to/h5ad/file&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">SamplingProcessor</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">cluster_col</span><span class="o">=</span><span class="s2">&quot;cell_type&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="s2">&quot;balance&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.sampling">
 <span class="sig-name descname"><span class="pre">sampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.sampling" title="Permalink to this definition"></a></dt>
-<dd><p>Sampling function with strategy parameter.
-:param strategy: sampling strategy</p>
-<blockquote>
-<div><p>Sampling Strategy Option:
-<code class="docutils literal notranslate"><span class="pre">stratify</span></code>:</p>
-<blockquote>
-<div><p>Classical stratified sampling</p>
-</div></blockquote>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">balance</span></code>:</dt><dd><p>Stratified sampling with balanced ratio</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">compactness</span></code>:</dt><dd><p>Adjusted sampling with intra-cluster compactness factor</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">complexity</span></code>:</dt><dd><p>Adjusted sampling with inter-cluster complexity factor</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">concave</span></code>:</dt><dd><p>Adjusted sampling with concave integration of compactness factor and complexity factor</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">convex</span></code>:</dt><dd><p>Adjusted sampling with convex integration of compactness factor and complexity factor</p>
-</dd>
-<dt><code class="docutils literal notranslate"><span class="pre">entropy</span></code>:</dt><dd><p>Adjusted sampling with entropy weight integration of compactness factor and complexity factor</p>
-</dd>
-</dl>
-</div></blockquote>
+<dd><p>Sampling function with strategy parameter.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>sampled dataset as AnnData object</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>strategy</strong> (<em>str</em><em>, </em><em>{'stratify'</em><em>, </em><em>'balance'</em><em>, </em><em>'compactness'</em><em>, </em><em>'complexity'</em><em>, </em><em>'concave'</em><em>, </em><em>'convex'</em><em>, </em><em>'entropy'}</em>) – Sampling strategy chosen from <a class="reference internal" href="../../config/index.html#tools.config.SamplingStrategy" title="tools.config.SamplingStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">tools.config.SamplingStrategy</span></code></a>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sampled dataset as <code class="xref py py-class docutils literal notranslate"><span class="pre">anndata.AnnData</span></code> object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.reset_ratio">
-<span class="sig-name descname"><span class="pre">reset_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.reset_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.reset_ratio" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._reset_ratio">
+<span class="sig-name descname"><span class="pre">_reset_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._reset_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._reset_ratio" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.get_target_dataset">
 <span class="sig-name descname"><span class="pre">get_target_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.get_target_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.get_target_dataset" title="Permalink to this definition"></a></dt>
-<dd><p>Get sampled dataset.
-:return: sampled dataset as AnnData object</p>
+<dd><p>Get sampled dataset.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.generate_factors">
-<span class="sig-name descname"><span class="pre">generate_factors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.generate_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.generate_factors" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">generate_factors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.generate_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.generate_factors" title="Permalink to this definition"></a></dt>
+<dd><p>Generate cluster-specific factors.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._check_factor">
-<span class="sig-name descname"><span class="pre">_check_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._check_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._check_factor" title="Permalink to this definition"></a></dt>
-<dd><p>Check the existence of specific factor
-:param factor_type: factor name</p>
+<span class="sig-name descname"><span class="pre">_check_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._check_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._check_factor" title="Permalink to this definition"></a></dt>
+<dd><p>Optimize generation of specific factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>factor_type</strong> – Type of factor chosen from <a class="reference internal" href="../../config/index.html#tools.config.SamplingStrategy" title="tools.config.SamplingStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">tools.config.SamplingStrategy</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._generate_oversampling">
 <span class="sig-name descname"><span class="pre">_generate_oversampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._generate_oversampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._generate_oversampling" title="Permalink to this definition"></a></dt>
-<dd><p>Generate oversampling dataset.
-SMOTE is the most stable oversampling method (Generate fully-balanced dataset)
-Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans</p>
+<dd><p>Generate oversampling dataset by SMOTE.</p>
+<p>SMOTE is the most stable oversampling method (Generate fully-balanced dataset)</p>
 </dd></dl>
 
 <dl class="py method">
@@ -161,15 +260,30 @@ Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor._imbalance_sampling">
 <span class="sig-name descname"><span class="pre">_imbalance_sampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">anndata.AnnData</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor._imbalance_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor._imbalance_sampling" title="Permalink to this definition"></a></dt>
-<dd><p>Imbalanced sampling operation.
-:param target_ratio: target sampling ratio for each cluster
-:return: sampled dataset as AnnData object</p>
+<dd><p>Imbalanced sampling operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target_ratio</strong> – target sampling ratio for each cluster</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>sampled dataset as <code class="xref py py-class docutils literal notranslate"><span class="pre">anndata.AnnData</span></code> object</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.to_hdf5">
-<span class="sig-name descname"><span class="pre">to_hdf5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.to_hdf5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.to_hdf5" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="tools.processing.sampler.SamplingProcessor.suggest_ratio">
+<span class="sig-name descname"><span class="pre">suggest_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../../_modules/tools/processing/sampler.html#SamplingProcessor.suggest_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.processing.sampler.SamplingProcessor.suggest_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Generate suggested sampling ratio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strategy</strong> – Type of sampling strategy chosen from <a class="reference internal" href="../../config/index.html#tools.config.SamplingStrategy" title="tools.config.SamplingStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">tools.config.SamplingStrategy</span></code></a></p></li>
+<li><p><strong>quantile</strong> – Customized quantile for hypothesis test.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -180,7 +294,10 @@ Other choices: BorderlineSMOTE, ADASYN, SMOTESVM, SMOTEKmeans</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../preprocessing/index.html" class="btn btn-neutral float-left" title="tools.processing.preprocessing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../config/index.html" class="btn btn-neutral float-right" title="tools.config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

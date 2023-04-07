@@ -22,7 +22,6 @@ Submodules
 
    config/index.rst
    decorator/index.rst
-   plot/index.rst
    utils/index.rst
 
 

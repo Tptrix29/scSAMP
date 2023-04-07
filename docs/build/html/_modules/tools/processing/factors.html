@@ -42,6 +42,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -96,13 +98,21 @@
         <span class="n">numeric_arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compactness Factor Calculation</span>
 <span class="sd">        compactness-factor = 1 - compactness</span>
-<span class="sd">    :param info_data: dataframe including cluster info</span>
-<span class="sd">    :param numeric_arr: expression matrix</span>
-<span class="sd">    :param label: cluster label name</span>
-<span class="sd">    :return: (cluster types info, compactness factor array)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    info_data</span>
+<span class="sd">        Metadata as :class:`pandas.DataFrame` with cluster label column.</span>
+<span class="sd">    numeric_arr</span>
+<span class="sd">        Numeric profile as 2-d :class:`numpy.array`.</span>
+<span class="sd">    label</span>
+<span class="sd">        Column name of cluster label.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        tuple(cluster label, compactness factor array)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">summary</span> <span class="o">=</span> <span class="n">info_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">_compactness</span><span class="p">(</span><span class="n">numeric_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span> <span class="p">:])</span>
@@ -115,13 +125,21 @@
         <span class="n">numeric_arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Complexity Factor Calculation:</span>
 <span class="sd">        complexity-factor = complexity</span>
-<span class="sd">    :param info_data: dataframe including cluster info</span>
-<span class="sd">    :param numeric_arr: expression matrix</span>
-<span class="sd">    :param label: cluster label name</span>
-<span class="sd">    :return: (cluster types info, complexity factor array)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    info_data</span>
+<span class="sd">        Metadata as :class:`pandas.DataFrame` with cluster label column.</span>
+<span class="sd">    numeric_arr</span>
+<span class="sd">        Numeric profile as 2-d :class:`numpy.array`.</span>
+<span class="sd">    label</span>
+<span class="sd">        Column name of cluster label.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        tuple(cluster label, complexity factor array)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">avg</span> <span class="o">=</span> <span class="n">info_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
         <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numeric_arr</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()),</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -134,32 +152,53 @@
     <span class="k">return</span> <span class="n">summary</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">summary</span> <span class="o">/</span> <span class="n">summary</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="concave_2var"><a class="viewcode-back" href="../../../autoapi/tools/processing/factors/index.html#tools.processing.factors.concave_2var">[docs]</a><span class="k">def</span> <span class="nf">concave_2var</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec2</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Concave Integration</span>
-<span class="sd">    :param vec1: compactness factor</span>
-<span class="sd">    :param vec2: complexity factor</span>
-<span class="sd">    :return: concave index</span>
+<div class="viewcode-block" id="concave_2var"><a class="viewcode-back" href="../../../autoapi/tools/processing/factors/index.html#tools.processing.factors.concave_2var">[docs]</a><span class="k">def</span> <span class="nf">concave_2var</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Concave integration of 2 factors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vec1</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    vec2</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Integrated factor as 1-d :class:`numpy.array`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">_proto_concave</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span> <span class="o">+</span> <span class="n">_proto_concave</span><span class="p">(</span><span class="n">vec2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="convex_2var"><a class="viewcode-back" href="../../../autoapi/tools/processing/factors/index.html#tools.processing.factors.convex_2var">[docs]</a><span class="k">def</span> <span class="nf">convex_2var</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convex Integration</span>
-<span class="sd">    :param vec1: compactness factor</span>
-<span class="sd">    :param vec2: complexity factor</span>
-<span class="sd">    :return: convex index</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convex integration of 2 factors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vec1</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    vec2</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Integrated factor as 1-d :class:`numpy.array`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">_proto_convex</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span> <span class="o">+</span> <span class="n">_proto_convex</span><span class="p">(</span><span class="n">vec2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="entropy_2var"><a class="viewcode-back" href="../../../autoapi/tools/processing/factors/index.html#tools.processing.factors.entropy_2var">[docs]</a><span class="k">def</span> <span class="nf">entropy_2var</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Entropy Integration</span>
-<span class="sd">    :param vec1: compactness factor</span>
-<span class="sd">    :param vec2: complexity factor</span>
-<span class="sd">    :return: integrated index with entropy weight</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Integration of 2 factors with entropy weight.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vec1</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    vec2</span>
+<span class="sd">        Factor vector as 1-d :class:`numpy.array`.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        Integrated factor as 1-d :class:`numpy.array`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">d1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">_entropy_1d</span><span class="p">(</span><span class="n">vec1</span><span class="p">)</span>
     <span class="n">d2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">_entropy_1d</span><span class="p">(</span><span class="n">vec2</span><span class="p">)</span>
