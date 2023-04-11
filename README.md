@@ -1,5 +1,7 @@
 ## scRNA-seq Data Sampling Toolkit
 
+[Document](https://scdesign.readthedocs.io/en/latest/index.html)
+
 ### Method Design
 1. Factor calculation
 2. Ratio balance

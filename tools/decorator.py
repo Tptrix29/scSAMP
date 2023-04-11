@@ -14,7 +14,7 @@ def eval_metrics(eval_func):
             "kappa": cohen_kappa_score(y, y_pred)
         }
         for i in set(y):
-            _, _, _, clst_f1, _ = specific_scores(y=y, y_pred=y_pred, target=i)
+            _, _, clst_f1 = specific_scores(y=y, y_pred=y_pred, target=i)
             scores[i+"_F1"] = clst_f1
         return scores
     return wrapper

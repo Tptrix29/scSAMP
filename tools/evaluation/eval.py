@@ -76,7 +76,7 @@ class EvaluationProcessor:
                 X_train = self.train.X
                 y_train = self.train.obs[self.pred_col]
 
-                # TODO: Evaluation
+                # Evaluation
                 if classifier == EvaluationStrategy.SVM:
                     training_time: float = self._svm_train(X_train, y_train, **kwargs)
                     record: dict = self._svm_eval(X_test, y_test)
@@ -86,7 +86,7 @@ class EvaluationProcessor:
                 else:
                     raise ValueError(f"Invalid Classifier '{classifier}'")
 
-                # TODO: Set up record properties
+                # Set up record properties
                 record["train_time"] = training_time
                 record["model"] = classifier
                 record["method"] = sampling

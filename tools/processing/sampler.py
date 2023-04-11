@@ -37,7 +37,7 @@ class SamplingProcessor:
 
     Notes
     -----
-    This is a beta version.
+    This is a beta version. ()
 
     Examples
     --------
@@ -46,6 +46,10 @@ class SamplingProcessor:
     >>> sampler = SamplingProcessor(reference=data, cluster_col="cell_type", random_state=0)
     >>> sampler.sampling("balance")
     """
+
+    # TODO: Count Matrix Generation
+    # TODO: Strategy Selection
+    # TODO: Customized Size
 
     def __init__(
             self,
@@ -75,6 +79,15 @@ class SamplingProcessor:
                                 index=['count', 'ratio']))
         self.metadata['ratio_balanced'] = balance_power(self.metadata['ratio'])
 
+    def set_size(self, ratio: float = None, n: int = None):
+        if ratio and n:
+            raise ValueError("Choose 1 parameter to define sampling size.")
+        if ratio:
+            _check_ratio(ratio)
+            self._reset_ratio(ratio)
+        if n and n > 0:
+            self._reset_ratio(n / self.raw_count)
+
     def sampling(
             self,
             strategy: str,
@@ -97,7 +110,8 @@ class SamplingProcessor:
             raise(ValueError(f"Invalid Sampling Strategy '{strategy}'."))
 
         if self.latest_label:
-            self.oversampling_dataset.obs[self.latest_label] = False
+            if self.oversampling_dataset:
+                self.oversampling_dataset.obs[self.latest_label] = False
         self.latest_label = self.cluster_label + '_' + strategy
         if strategy == SamplingStrategy.STRATIFY:
             return self._stratify()

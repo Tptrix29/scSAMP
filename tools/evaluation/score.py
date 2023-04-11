@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score
 
 
 def specific_scores(y: np.array,
@@ -47,15 +47,11 @@ def specific_scores(y: np.array,
     TP = confusion[loc][loc]
     FP = sum0[loc] - TP
     FN = sum1[loc] - TP
-    p_observe = TP / total
-    p_expect = sum0[loc] * sum1[loc] / (total ** 2)
 
-    acc = TP / total
     precision = 0 if TP + FP == 0 else TP / (TP + FP)
     recall = 0 if TP + FN == 0 else TP / (TP + FN)
     F1 = 0 if TP == 0 else 2 * precision * recall / (precision + recall)
-    kappa = np.abs(p_observe - p_expect) / (1 - p_expect)
 
-    return acc, precision, recall, F1, kappa
+    return precision, recall, F1
 
 
