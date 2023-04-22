@@ -6,11 +6,11 @@ import pandas as pd
 from anndata import AnnData
 from sklearn.svm import SVC
 
-from tools.config import SamplingStrategy, EvaluationStrategy
-from tools.decorator import eval_metrics, time_logging
-from tools.evaluation.model.actinn import ACTINN
-from tools.processing.sampler import SamplingProcessor
-from tools.utils import _check_obs_key
+from ..config import SamplingStrategy, EvaluationStrategy
+from ..decorator import eval_metrics, time_logging
+from ..evaluation.model.actinn import ACTINN
+from ..processing.sampler import SamplingProcessor
+from ..utils import _check_obs_key
 
 font = {'family': 'serif',
         'serif': 'Helvetica',
@@ -56,7 +56,15 @@ class EvaluationProcessor:
     ) -> None:
         """
         Evaluation with certain classifier.
-        :param classifier: classification model name
+
+        Parameters
+        ----------
+        classifier :class:`scSAMP.config.EvaluationStrategy`
+            classification model name
+
+        Returns
+        -------
+
         """
         _check_obs_key(self.query, self.pred_col)
 
@@ -76,7 +84,7 @@ class EvaluationProcessor:
                 X_train = self.train.X
                 y_train = self.train.obs[self.pred_col]
 
-                # TODO: Evaluation
+                # Evaluation
                 if classifier == EvaluationStrategy.SVM:
                     training_time: float = self._svm_train(X_train, y_train, **kwargs)
                     record: dict = self._svm_eval(X_test, y_test)
@@ -86,7 +94,7 @@ class EvaluationProcessor:
                 else:
                     raise ValueError(f"Invalid Classifier '{classifier}'")
 
-                # TODO: Set up record properties
+                # Set up record properties
                 record["train_time"] = training_time
                 record["model"] = classifier
                 record["method"] = sampling

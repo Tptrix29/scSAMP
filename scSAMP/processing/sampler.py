@@ -5,11 +5,11 @@ from anndata import AnnData
 from typing import Optional
 from imblearn.over_sampling import SMOTE
 
-from tools.utils import settings, _check_obs_key, _check_ratio
-from tools.processing.balance import balance_power
-import tools.processing.factors as fc
-from tools.config import SamplingStrategy
-from tools.decorator import time_logging
+from ..utils import settings, _check_obs_key, _check_ratio
+from ..processing.balance import balance_power
+from ..processing import factors as fc
+from ..config import SamplingStrategy
+from ..decorator import time_logging
 
 
 class SamplingProcessor:
@@ -37,7 +37,7 @@ class SamplingProcessor:
 
     Notes
     -----
-    This is a beta version.
+    This is a beta version. ()
 
     Examples
     --------
@@ -63,9 +63,8 @@ class SamplingProcessor:
 
         self.raw_count: int = self.reference.obs.shape[0]
 
-        self.latest_label: str = ''
+        self.latest_label: str = 'NoSampling'
         self.oversampling_dataset: Optional[AnnData] = None
-        self.target_ratio: float = 0
 
         # change index
         self.reference.obs.index = pd.RangeIndex(self.raw_count).astype(str)
@@ -74,6 +73,15 @@ class SamplingProcessor:
             lambda x: pd.Series([x.shape[0], x.shape[0] / self.reference.shape[0]],
                                 index=['count', 'ratio']))
         self.metadata['ratio_balanced'] = balance_power(self.metadata['ratio'])
+
+    def set_size(self, ratio: float = None, n: int = None):
+        if ratio and n:
+            raise ValueError("Choose 1 parameter to define sampling size.")
+        if ratio:
+            _check_ratio(ratio)
+            self._reset_ratio(ratio)
+        if n and n > 0:
+            self._reset_ratio(n / self.raw_count)
 
     def sampling(
             self,
@@ -85,7 +93,7 @@ class SamplingProcessor:
         Parameters
         ----------
         strategy: str, {'stratify', 'balance', 'compactness', 'complexity', 'concave', 'convex', 'entropy'}
-            Sampling strategy chosen from :class:`tools.config.SamplingStrategy`.
+            Sampling strategy chosen from :class:`scSAMP.config.SamplingStrategy`.
 
         Returns
         -------
@@ -97,9 +105,11 @@ class SamplingProcessor:
             raise(ValueError(f"Invalid Sampling Strategy '{strategy}'."))
 
         if self.latest_label:
-            self.oversampling_dataset.obs[self.latest_label] = False
+            if self.oversampling_dataset:
+                self.oversampling_dataset.obs[self.latest_label] = False
         self.latest_label = self.cluster_label + '_' + strategy
-        if strategy == SamplingStrategy.STRATIFY:
+
+        if strategy == SamplingStrategy.STRATIFY or self.sampling_ratio >= 0.5:
             return self._stratify()
         if strategy == SamplingStrategy.BALANCE:
             return self._imbalance_sampling(balance_power(self.metadata['ratio']))
@@ -136,7 +146,7 @@ class SamplingProcessor:
         Generate cluster-specific factors.
         """
         for s in SamplingStrategy:
-            if s != SamplingStrategy.BALANCE and s!= SamplingStrategy.STRATIFY:
+            if s != SamplingStrategy.BALANCE and s != SamplingStrategy.STRATIFY:
                 self._check_factor(str(s))
 
     def _check_factor(self, factor_type: str) -> None:
@@ -146,7 +156,7 @@ class SamplingProcessor:
         Parameters
         ----------
         factor_type
-            Type of factor chosen from :class:`tools.config.SamplingStrategy`
+            Type of factor chosen from :class:`scSAMP.config.SamplingStrategy`
         """
         factor_type = str(factor_type)
         if factor_type not in self.metadata.columns:
@@ -226,7 +236,8 @@ class SamplingProcessor:
             clst = self.reference.obs[self.reference.obs[self.cluster_label] == self.metadata.index[i]]
             sample_count = int(np.round(target_ratio[i] * target_count))
             if sample_count <= clst.shape[0]:
-                ref_target_index = ref_target_index.union(clst.sample(n=sample_count, random_state=self.random_state).index)
+                ref_target_index = ref_target_index.union(
+                    clst.sample(n=sample_count, random_state=self.random_state).index)
             # Oversampling Operation
             else:
                 ref_target_index = ref_target_index.union(clst.index)
@@ -253,18 +264,28 @@ class SamplingProcessor:
 
     # def to_hdf5(self, strategy: str, format: str, prefix: Optional[str], suffix: Optional[str]) -> None:
 
-    def suggest_ratio(self, strategy: str, quantile: float = 0.99) -> float:
+    def suggest_ratio(self, strategy: str, quantile: float = 0.99, n: int = 1) -> float:
         """
         Generate suggested sampling ratio.
 
         Parameters
         ----------
-        strategy
-            Type of sampling strategy chosen from :class:`tools.config.SamplingStrategy`
-        quantile
+        n: int
+            Least random count of minimum cluster in sampled dataset.
+        strategy: :class:`tools.config.SamplingStrategy`
+            Type of chosen sampling strategy.
+        quantile: float
             Customized quantile for hypothesis test.
         """
+        self._check_factor(strategy)
         import scipy.stats as sts
         mini_prob: float = min(self.metadata[str(strategy)+"_balanced"])
-        size: float = sts.nbinom.ppf(q=quantile, p=mini_prob, n=1)
-        return size / self.raw_count
+        size: float = sts.nbinom.ppf(q=quantile, p=mini_prob, n=n)
+        ratio: float = size / self.raw_count
+        if ratio >= 1:
+            raise ValueError(f"Excessive sampling size, please input valid value of 'quantile' or 'n'."
+                             f"(Try to reduce parameters)")
+        elif ratio >= 0.5:
+            raise Warning(f"Sampling strategy will degenerate into classical stratified sampling.")
+        else:
+            return size / self.raw_count

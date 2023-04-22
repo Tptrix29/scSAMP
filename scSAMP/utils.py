@@ -1,13 +1,15 @@
-from typing import Union
-from pathlib import Path
-import time
-
+import os
 import numpy as np
 import pandas as pd
 import pyreadr as renv
+from typing import Union
+from pathlib import Path
 from anndata import AnnData
 
-class Setting():
+from .decorator import time_logging
+
+
+class Setting:
     def __init__(self):
         self.random_state: int = 0
         self.reset_seed()
@@ -19,16 +21,54 @@ class Setting():
 settings = Setting()
 
 
-def timer(func):
-    def wrapper(*args, **kwargs):
-        st = time.time()
-        func(*args, **kwargs)
-        end = time.time()
-        print(f"Time consumption of running '{func.__name__}': {end - st}")
-    return wrapper
+def sampling_stream(
+        data: AnnData,
+        output_dir: str,
+        prefix: str,
+        suffix: str,
+        ratio_range: np.array,
+) -> list:
+    """
+    IO stream of sampling evaluation.
+    Parameters
+    ----------
+    data: :class:`anndata.AnnData`
+        Raw dataset.
+    output_dir: str
+        Output directory.
+    prefix: str
+        Output file prefix.
+    suffix: str
+        Output file suffix.
+    ratio_range: :class:`numpy.array`
+        Sampling ratio range.
+
+    Returns
+    -------
+        List of output filename.
+    """
+    if os.path.exists(output_dir):
+        raise FileExistsError(f"'{output_dir}' is not empty, please choose an empty directory")
+    else:
+        os.mkdir(output_dir)
+    from .processing.sampler import SamplingProcessor, SamplingStrategy
+    sampler = SamplingProcessor(reference=data, cluster_col="cell_type")
+    files = []
+    for r in ratio_range:
+        sampler.set_size(ratio=r)
+        for s in SamplingStrategy:
+            s = str(s)
+            sampled_data: AnnData = sampler.sampling(strategy=s)
+            filename = "_".join([prefix, str(r), s, suffix]) + ".rds"
+            files.append(filename)
+            output = output_dir + '/' + filename
+            print(f"Written {filename} at {output_dir}")
+            to_rds(sampled_data, output)
+
+    return files
 
 
-@timer
+@time_logging(mode="rds file stream")
 def to_rds(
         data: AnnData,
         output_file: str,
@@ -38,7 +78,7 @@ def to_rds(
     renv.write_rds(output_file, rds)
 
 
-@timer
+@time_logging(mode="hdf5 file stream")
 def to_hdf5(
         source_file: Union[str, list],
         result_dir: str,

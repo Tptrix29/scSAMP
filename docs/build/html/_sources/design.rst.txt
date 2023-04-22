@@ -158,19 +158,19 @@ X \sim NB(r, p)
 $$
 
 :Possibility mass function, pmf:
-$$
-f(k;r, p) = P(X=k) = \binom {k-1}{r-1}p^r(1-p)^{k-r}~~~k=r, r+1,...
-$$
+    $$
+    f(k;r, p) = P(X=k) = \binom {k-1}{r-1}p^r(1-p)^{k-r}~~~k=r, r+1,...
+    $$
 
 :Cumulative distribution function, cdf:
-$$
-F(k; r, p) = P(X\leq k) = \sum_{i=r}^{k} P(X=i)
-$$
+    $$
+    F(k; r, p) = P(X\leq k) = \sum_{i=r}^{k} P(X=i)
+    $$
 
 :Expectation & Variance:
-$$
-E(X) = \frac{r}{p} ~~~~~ Var(X) = \frac{r}{p^2}
-$$
+    $$
+    E(X) = \frac{r}{p} ~~~~~ Var(X) = \frac{r}{p^2}
+    $$
 
 
 
