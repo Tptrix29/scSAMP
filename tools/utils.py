@@ -28,6 +28,25 @@ def sampling_stream(
         suffix: str,
         ratio_range: np.array,
 ) -> list:
+    """
+    IO stream of sampling evaluation.
+    Parameters
+    ----------
+    data: :class:`anndata.AnnData`
+        Raw dataset.
+    output_dir: str
+        Output directory.
+    prefix: str
+        Output file prefix.
+    suffix: str
+        Output file suffix.
+    ratio_range: :class:`numpy.array`
+        Sampling ratio range.
+
+    Returns
+    -------
+        List of output filename.
+    """
     if os.path.exists(output_dir):
         raise FileExistsError(f"'{output_dir}' is not empty, please choose an empty directory")
     else:

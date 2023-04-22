@@ -56,7 +56,15 @@ class EvaluationProcessor:
     ) -> None:
         """
         Evaluation with certain classifier.
-        :param classifier: classification model name
+
+        Parameters
+        ----------
+        classifier :class:`tools.config.EvaluationStrategy`
+            classification model name
+
+        Returns
+        -------
+
         """
         _check_obs_key(self.query, self.pred_col)
 

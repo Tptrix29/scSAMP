@@ -6,15 +6,24 @@ from anndata import AnnData
 from typing import Union
 from abc import abstractmethod, ABCMeta
 
-"""
-Logging: BasePreprocessor
-- Basic Preprocessing
-- HVG Preprocessor
-- PCA Preprocessor
-"""
-
 
 class BasePreprocessor(metaclass=ABCMeta):
+    """
+    Base abstract class for preprocessing.
+
+    Attributes
+    ------------
+    gene_index: :class:`pandas.Index`
+        Selected genes' index
+    is_prior: bool
+        Weather reference is preprocessed
+    basic_params: dict
+        Preprocessing parameters
+
+    Notes
+    --------
+
+    """
     @abstractmethod
     def __init__(self):
         self.gene_index: Union[pd.Index, None] = None
@@ -44,33 +53,85 @@ class BasePreprocessor(metaclass=ABCMeta):
 
     @abstractmethod
     def refPreprocessing(self, ref: AnnData) -> AnnData:
+        """
+        Preprocessing reference dataset.
+        Parameters
+        ----------
+        ref :class:`anndata.AnnData`
+            reference dataset
+        Returns
+        -------
+        Preprocessed reference dataset
+        """
         pass
 
     @abstractmethod
     def queryPreprocessor(self, query: AnnData) -> AnnData:
+        """
+        Preprocessing query dataset.
+
+        Parameters
+        ----------
+        query :class:`anndata.AnnData`
+            query dataset
+        Returns
+        -------
+        Preprocessed query dataset
+        """
         pass
 
     def basicProcessing(self, adata) -> None:
         """
-        Basic Preprocessing Steps, including:
-        1. Filtering cells
-        2. Normalization by counts per cell, every cell has the same total count after normalization
-        3. Logarithm Transformation
-        :param adata: reference data
-        :return: None (Default inplace = True)
+        Basic Preprocessing
+
+        Parameters
+        ----------
+        adata :class:`anndata.AnnData`
+            reference data
+
+        Returns
+        -------
+
         """
         sc.pp.filter_cells(adata, min_genes=self.basic_params['genes_threshold'])
         sc.pp.normalize_total(adata, target_sum=self.basic_params['target_threshold'])
         sc.pp.log1p(adata)
 
     def test_prior(self) -> None:
+        """
+        Ensure the reference dataset is preprocessed.
+
+        Returns
+        -------
+
+        """
         if not self.is_prior:
             raise (ValueError("Use 'refPreprocessing' to get index first."))
 
 
 class BasicPreprocessor(BasePreprocessor):
     """
-    Non feature selection.
+    Basic preprocessing class.
+
+    Attributes
+    ------------
+    gene_index: :class:`pandas.Index`
+        Selected genes' index
+    is_prior: bool
+        Weather reference is preprocessed
+    basic_params: dict
+        Preprocessing parameters
+
+    Notes
+    --------
+    Steps:
+        1. Filtering cells
+        2. Normalization by counts per cell, every cell has the same total count after normalization
+        3. Logarithm Transformation
+
+    Examples
+    ---------
+
     """
     def __init__(self):
         super().__init__()
@@ -96,10 +157,28 @@ class BasicPreprocessor(BasePreprocessor):
 
 class HVGPreprocessor(BasePreprocessor):
     """
-    Highly Variable Genes (HVGs) for feature selection.
+    Preprocessing class for HVG (Highly Variable Gene) selection.
+    Attributes
+    ------------
+    gene_index: :class:`pandas.Index`
+        Selected genes' index
+    is_prior: bool
+        Weather reference is preprocessed
+    basic_params: dict
+        Preprocessing parameters
+    n_hvg: int
+        HVG count
+
+    Notes
+    --------
     Steps:
-    1. Basic preprocessing
-    2. HVG selection
+        1. Basic preprocessing
+        2. HVG selection
+
+    Examples
+    ---------
+
+
     """
     def __init__(self, n_hvg: int = 1000):
         super().__init__()
@@ -111,6 +190,7 @@ class HVGPreprocessor(BasePreprocessor):
 
     def reset_n_hvg(self, n_hvg: int) -> None:
         self.n_hvg = n_hvg
+        self.is_prior = False
 
     def refPreprocessing(self, ref: AnnData) -> AnnData:
         super().basicProcessing(adata=ref)
@@ -131,14 +211,36 @@ class HVGPreprocessor(BasePreprocessor):
 
 class PCAPreprocessor(BasePreprocessor):
     """
-    Principle Components Analysis for feature selection.
+    Preprocessing class for PCA (Principle Components Analysis).
+
+    Attributes
+    ------------
+    gene_index: :class:`pandas.Index`
+        Selected genes' index
+    is_prior: bool
+        Weather reference is preprocessed
+    basic_params: dict
+        Preprocessing parameters
+    n_hvg: int
+        HVG count
+    n_pc: int
+        PC count
+
+    Notes
+    --------
     Steps:
-    1. Basic preprocessing
-    2. HVG selection
-    3. PC selection
+        1. Basic preprocessing
+        2. HVG selection
+        3. PC selection
+
+    Examples
+    ---------
+
+
     """
-    def __init__(self, n_pc: int = 40):
+    def __init__(self, n_hvg: int = 1000, n_pc: int = 50):
         super().__init__()
+        self.n_hvg: int = n_hvg
         self.n_pc: int = n_pc
         self.trans_matrix: np.array = None
 
@@ -147,11 +249,36 @@ class PCAPreprocessor(BasePreprocessor):
         print(f'PC Number: {self.n_pc}')
         print(f'Transformation Matirx Shape: {self.trans_matrix.shape}')
 
+    def reset_n_hvg(self, n_hvg: int) -> None:
+        self.n_hvg = n_hvg
+        self.is_prior = False
+
+    def reset_n_pc(self, n_pc) -> None:
+        self.n_pc = n_pc
+        self.is_prior = False
+
     def refPreprocessing(self, ref: AnnData) -> AnnData:
-        # sc.tl.pca(adata, svd_solver='arpack')
-        pass
+        super().basicProcessing(adata=ref)
+        sc.pp.highly_variable_genes(ref, n_top_genes=self.n_hvg, inplace=True)
+        self.gene_index = ref.var[ref.var['highly_variable']].index
+        ref = ref[:, self.gene_index]
+        sc.pp.scale(ref, max_value=self.basic_params['max_threshold'])
+        sc.tl.pca(ref, svd_solver='arpack')
+        self.is_prior = True
+        self.trans_matrix = ref.varm["PCs"][:, :self.n_pc]
+        new_ref = ref[:, :self.n_pc]
+        new_ref.var.index = ["PC" + str(i+1) for i in range(self.n_pc)]
+        new_ref.X = ref.obsm["X_pca"][:, :self.n_pc]
+        return new_ref
 
     def queryPreprocessor(self, query: AnnData) -> AnnData:
-        pass
+        super().test_prior()
+        super().basicProcessing(adata=query)
+        new_query = query[:, self.gene_index]
+        sc.pp.scale(new_query, max_value=self.basic_params['max_threshold'])
+        target_query = new_query[:, :self.n_pc]
+        target_query.var.index = ["PC" + str(i+1) for i in range(self.n_pc)]
+        target_query.X = new_query.X.dot(self.trans_matrix)
+        return target_query
 
 
