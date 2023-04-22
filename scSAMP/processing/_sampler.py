@@ -5,11 +5,11 @@ from anndata import AnnData
 from typing import Optional
 from imblearn.over_sampling import SMOTE
 
-from ..utils import settings, _check_obs_key, _check_ratio
-from ..processing.balance import balance_power
-from ..processing import factors as fc
-from ..config import SamplingStrategy
-from ..decorator import time_logging
+from .._utils import settings, _check_obs_key, _check_ratio
+from ..processing._balance import balance_power
+from ..processing import _factors as fc
+from .._config import SamplingStrategy
+from .._decorator import time_logging
 
 
 class SamplingProcessor:

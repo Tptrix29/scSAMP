@@ -6,7 +6,7 @@ from typing import Union
 from pathlib import Path
 from anndata import AnnData
 
-from .decorator import time_logging
+from ._decorator import time_logging
 
 
 class Setting:
@@ -51,7 +51,7 @@ def sampling_stream(
         raise FileExistsError(f"'{output_dir}' is not empty, please choose an empty directory")
     else:
         os.mkdir(output_dir)
-    from .processing.sampler import SamplingProcessor, SamplingStrategy
+    from .processing._sampler import SamplingProcessor, SamplingStrategy
     sampler = SamplingProcessor(reference=data, cluster_col="cell_type")
     files = []
     for r in ratio_range:

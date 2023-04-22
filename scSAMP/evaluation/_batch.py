@@ -6,11 +6,11 @@ import pandas as pd
 from anndata import AnnData
 from sklearn.svm import SVC
 
-from ..config import SamplingStrategy, EvaluationStrategy
-from ..decorator import eval_metrics, time_logging
-from ..evaluation.model.actinn import ACTINN
-from ..processing.sampler import SamplingProcessor
-from ..utils import _check_obs_key
+from .._config import SamplingStrategy, EvaluationStrategy
+from .._decorator import eval_metrics, time_logging
+from ..evaluation.model._actinn import ACTINN
+from ..processing._sampler import SamplingProcessor
+from .._utils import _check_obs_key
 
 font = {'family': 'serif',
         'serif': 'Helvetica',

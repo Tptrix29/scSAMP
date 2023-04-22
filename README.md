@@ -1,6 +1,7 @@
 ## scRNA-seq Data Sampling Toolkit
 
 [Document](https://scdesign.readthedocs.io/en/latest/index.html)
+[PyPI](https://pypi.org/project/scSAMP)
 
 ### Method Design
 1. Factor calculation
