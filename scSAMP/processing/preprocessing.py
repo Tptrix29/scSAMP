@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 from anndata import AnnData
-
 from typing import Union
 from abc import abstractmethod, ABCMeta
 

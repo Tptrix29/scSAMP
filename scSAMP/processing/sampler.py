@@ -5,11 +5,11 @@ from anndata import AnnData
 from typing import Optional
 from imblearn.over_sampling import SMOTE
 
-from tools.utils import settings, _check_obs_key, _check_ratio
-from tools.processing.balance import balance_power
-import tools.processing.factors as fc
-from tools.config import SamplingStrategy
-from tools.decorator import time_logging
+from ..utils import settings, _check_obs_key, _check_ratio
+from ..processing.balance import balance_power
+from ..processing import factors as fc
+from ..config import SamplingStrategy
+from ..decorator import time_logging
 
 
 class SamplingProcessor:
@@ -93,7 +93,7 @@ class SamplingProcessor:
         Parameters
         ----------
         strategy: str, {'stratify', 'balance', 'compactness', 'complexity', 'concave', 'convex', 'entropy'}
-            Sampling strategy chosen from :class:`tools.config.SamplingStrategy`.
+            Sampling strategy chosen from :class:`scSAMP.config.SamplingStrategy`.
 
         Returns
         -------
@@ -156,7 +156,7 @@ class SamplingProcessor:
         Parameters
         ----------
         factor_type
-            Type of factor chosen from :class:`tools.config.SamplingStrategy`
+            Type of factor chosen from :class:`scSAMP.config.SamplingStrategy`
         """
         factor_type = str(factor_type)
         if factor_type not in self.metadata.columns:

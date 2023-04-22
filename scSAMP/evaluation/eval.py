@@ -6,11 +6,11 @@ import pandas as pd
 from anndata import AnnData
 from sklearn.svm import SVC
 
-from tools.config import SamplingStrategy, EvaluationStrategy
-from tools.decorator import eval_metrics, time_logging
-from tools.evaluation.model.actinn import ACTINN
-from tools.processing.sampler import SamplingProcessor
-from tools.utils import _check_obs_key
+from ..config import SamplingStrategy, EvaluationStrategy
+from ..decorator import eval_metrics, time_logging
+from ..evaluation.model.actinn import ACTINN
+from ..processing.sampler import SamplingProcessor
+from ..utils import _check_obs_key
 
 font = {'family': 'serif',
         'serif': 'Helvetica',
@@ -59,7 +59,7 @@ class EvaluationProcessor:
 
         Parameters
         ----------
-        classifier :class:`tools.config.EvaluationStrategy`
+        classifier :class:`scSAMP.config.EvaluationStrategy`
             classification model name
 
         Returns

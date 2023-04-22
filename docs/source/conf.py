@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'scDesign'
+project = 'scSAMP'
 copyright = '2023, Tptrix29'
 author = 'Tptrix29'
 
@@ -91,4 +91,4 @@ mathjax3_config = {
 extensions.append('autoapi.extension')
 extensions.append("sphinx.ext.napoleon")
 autoapi_type = 'python'
-autoapi_dirs = ['../../tools']
+autoapi_dirs = ['../../scSAMP']

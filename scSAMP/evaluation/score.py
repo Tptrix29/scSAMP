@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import confusion_matrix, precision_score
+from sklearn.metrics import confusion_matrix
 
 
 def specific_scores(y: np.array,

@@ -1,2 +1,5 @@
 .idea
 test
+dist
+build
+scSAMP.egg-info

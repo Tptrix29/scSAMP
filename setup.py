@@ -12,9 +12,9 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'scs-tools'
-DESCRIPTION = 'scRNA-seq data sampling toolkit'
-URL = 'https://github.com/me/myproject'
+NAME = 'scSAMP'
+DESCRIPTION = 'scRNA-seq data sampling toolkit.'
+URL = 'https://github.com/Tptrix29/scSAMP'
 EMAIL = '1953776@tongji.edu.cn'
 AUTHOR = 'Pei Tian'
 REQUIRES_PYTHON = '>=3.10.0'
@@ -22,7 +22,8 @@ VERSION = '0.1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+    "numpy", "pandas", "matplotlib", "scikit-learn",
+    "pyreadr", "anndata", "tensorflow", "imbalanced-learn", "scanpy"
 ]
 
 # What packages are optional?
