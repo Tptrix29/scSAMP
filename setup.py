@@ -17,8 +17,8 @@ DESCRIPTION = 'scRNA-seq data sampling toolkit.'
 URL = 'https://github.com/Tptrix29/scSAMP'
 EMAIL = '1953776@tongji.edu.cn'
 AUTHOR = 'Pei Tian'
-REQUIRES_PYTHON = '>=3.10.0'
-VERSION = '0.1.1'
+REQUIRES_PYTHON = '>=3.6.0'
+VERSION = '0.1.4'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
