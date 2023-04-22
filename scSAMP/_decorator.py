@@ -1,6 +1,6 @@
 import time
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, cohen_kappa_score
-from .evaluation.score import specific_scores
+from .evaluation._score import specific_scores
 
 
 def eval_metrics(eval_func):
